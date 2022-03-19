@@ -72,6 +72,7 @@ class APRDataProvider:
         luna_apr.columns = ['Day','APR (%)']
         luna_apr['Asset'] = 'LUNA'
         self.aprs = yluna_apr.append(luna_apr)
+        self.aprs['APR (%)'] = self.aprs['APR (%)'].apply(lambda x: round(x,2))
 
 
 # In[142]:
@@ -95,3 +96,4 @@ class APRSChart:
                 labelAngle=0
             ).configure_view(strokeOpacity=0)
 
+c

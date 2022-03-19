@@ -169,6 +169,26 @@ with col1:
     sunt in culpa qui officia deserunt mollit anim id est laborum.""")
 with col2:
     st.altair_chart(prism_emitted_chart.properties(height=350), use_container_width=True)
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
+col0, col1, col2 = st.columns([0.1,1,2])
+with col1:
+    st.subheader('Staking APR')
+    st.markdown("""Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+    Ut enim ad minim veniam, quis nostrud exercitation ullamco 
+    laboris nisi ut aliquip ex ea commodo consequat.""")
+    st.markdown("""Duis aute irure dolor in reprehenderit in voluptate velit esse 
+    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
+    sunt in culpa qui officia deserunt mollit anim id est laborum.""")
+with col2:
+    st.text("")
+    st.altair_chart(aprs_chart.properties(height=350), use_container_width=True)
 
 st.text("")
 st.text("")
@@ -238,8 +258,8 @@ st.text("")
 st.text("")
 st.text("")
 
-col1, col2, col0 = st.columns([2,1,0.1])
-with col2:
+col0, col1, col2 = st.columns([0.1,1,2])
+with col1:
     st.subheader('xPRISM pldged to AMPs')
     st.markdown("""Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
     sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
@@ -248,29 +268,8 @@ with col2:
     st.markdown("""Duis aute irure dolor in reprehenderit in voluptate velit esse 
     cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
     sunt in culpa qui officia deserunt mollit anim id est laborum.""")
-with col1:
-    st.altair_chart(perc_amps_chart.properties(height=350), use_container_width=True)
-
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-
-col0, col1, col2 = st.columns([0.1,1,2])
-with col1:
-    st.subheader('Staking APR')
-    st.markdown("""Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-    Ut enim ad minim veniam, quis nostrud exercitation ullamco 
-    laboris nisi ut aliquip ex ea commodo consequat.""")
-    st.markdown("""Duis aute irure dolor in reprehenderit in voluptate velit esse 
-    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
-    sunt in culpa qui officia deserunt mollit anim id est laborum.""")
 with col2:
-    st.text("")
-    st.altair_chart(aprs_chart.properties(height=350), use_container_width=True)
+    st.altair_chart(perc_amps_chart.properties(height=350), use_container_width=True)
 
 st.markdown("""
 <style>

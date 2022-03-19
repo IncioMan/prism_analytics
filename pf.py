@@ -168,8 +168,6 @@ with col1:
     cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
     sunt in culpa qui officia deserunt mollit anim id est laborum.""")
 with col2:
-    st.text("")
-    st.text("")
     st.altair_chart(prism_emitted_chart.properties(height=350), use_container_width=True)
 
 st.text("")
@@ -251,7 +249,6 @@ with col2:
     cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
     sunt in culpa qui officia deserunt mollit anim id est laborum.""")
 with col1:
-    st.text("")
     st.altair_chart(perc_amps_chart.properties(height=350), use_container_width=True)
 
 st.text("")

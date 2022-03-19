@@ -17,7 +17,7 @@ class xPrismAMPsDP:
     
     def __init__(self, claim):
         self.xprism_bal_url = """https://terra-api.daic.capital/api/tx/GetRichlistByTokenContract?apiKey=vAp6ysmAXH470YcphYxv&contract_address=terra1042wzrwg2uk6jqxjm34ysqquyr9esdgm5qyswz"""
-        self.amps_hash = '91ea3cfb-2456-4ca9-b773-be6074835316'
+        self.amps_hash = '6504c0b2-4481-4344-911b-b1b7ce50dc1e'
         self.claim = claim
         
     def load(self):
@@ -58,10 +58,6 @@ def claim(claim_hash):
     return df
 
 
-
-# In[150]:
-
-
 class xPrismAmpsChart:
     
     def chart(perc_amps_n_user):
@@ -70,6 +66,10 @@ class xPrismAmpsChart:
             y='Number of users',
             tooltip= ['Percentage of xPRISM in AMPs', 'Number of users']
         ).properties(width=600).configure_view(strokeOpacity=0)
+
+
+
+
 
 
 

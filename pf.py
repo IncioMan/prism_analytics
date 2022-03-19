@@ -8,7 +8,7 @@ from libraries.prism_analytics import DataProvider, ChartProvider, LPDataProvide
 from libraries.prism_emitted import PrismEmittedChartProvider, PrismEmittedDataProvider
 from libraries.xPrismAmps_from_urls import xPrismAmpsChart, xPrismAMPsDP
 
-st.set_page_config(page_title="Prism Forge - Analytics",\
+st.set_page_config(page_title="Prism Farm - Analytics",\
         page_icon=Image.open(requests.get('https://raw.githubusercontent.com/IncioMan/prism_forge/master/images/xPRISM.png',stream=True).raw),\
         layout='wide')
 

@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import altair as alt
-from charts import ChartProvider
 import requests
 import datetime
 from PIL import Image

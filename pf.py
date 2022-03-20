@@ -16,7 +16,7 @@ st.set_page_config(page_title="Prism Farm - Analytics",\
 
 ###
 
-@st.cache(ttl=3000, show_spinner=False, allow_output_mutation=True)
+@st.cache(ttl=30000, show_spinner=False, allow_output_mutation=True)
 def claim(claim_hash, cols_claim=[]):
     df_claim = pd.read_json(
         f"https://api.flipsidecrypto.com/api/v2/queries/{claim_hash}/data/latest",
@@ -24,7 +24,7 @@ def claim(claim_hash, cols_claim=[]):
     )
     return df_claim
 
-@st.cache(ttl=3000, show_spinner=False, allow_output_mutation=True)
+@st.cache(ttl=30000, show_spinner=False, allow_output_mutation=True)
 def get_url(url):
     return pd.read_csv(url, index_col=0)
     
@@ -41,7 +41,7 @@ pdp = DataProvider('pLuna')
 pe_dp = PrismEmittedDataProvider()
 pe_cp = PrismEmittedChartProvider()
 
-@st.cache(ttl=3000, show_spinner=False, allow_output_mutation=True)
+@st.cache(ttl=30000, show_spinner=False, allow_output_mutation=True)
 def get_data(pe_dp, ystake_dp, refract_dp, swaps_dp, lp_dp, collector_dp, 
             ydp, pdp, xprism_amps_dp, aprs_dp, to_csv=False):
     print("{} - Loading data: ystake_dp...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
@@ -94,14 +94,23 @@ def get_data(pe_dp, ystake_dp, refract_dp, swaps_dp, lp_dp, collector_dp,
     pdp.all_delta()
     pdp.all_deltas = pdp.fill_date_gaps(pdp.all_deltas)
     pdp.unused_asset(pdp.all_deltas)
+
+    last_farm_apr = aprs_dp.aprs[(aprs_dp.aprs.Day==aprs_dp.aprs.Day.max())\
+                        &(aprs_dp.aprs['Staking Strategy']=='yLUNA staking in Prism Farm')]\
+                        ['APR (%)'].values[0]
+    df = ydp.daily_delta_stk_farm
+    last_yluna_farm= round(df[(df.Time==df.Time.max())\
+            &(df['Type']=='yLuna Farm staked')]\
+            ['Amount'].values[0]/1000000,2)
     return pe_dp.prism_emitted, pe_dp.prism_emitted_so_far, pe_dp.dates_to_mark,\
            pdp.dates_to_mark, pdp.asset_used, pdp.asset_unused, ydp.dates_to_mark,\
            ydp.asset_used, ydp.asset_unused, refract_dp.all_refreact, xprism_amps_dp.perc_amps_n_user,\
-           aprs_dp.aprs
+           aprs_dp.aprs, last_farm_apr, last_yluna_farm, pe_dp.up_to_today_emission
 
 pe_dp_prism_emitted, pe_dp_prism_emitted_so_far, pe_dp_dates_to_mark,\
 pdp_dates_to_mark, pdp_asset_used, pdp_asset_unused, ydp_dates_to_mark,\
-ydp_asset_used, ydp_asset_unused, all_refracts, perc_amps_n_user, aprs = get_data(pe_dp, ystake_dp, refract_dp, 
+ydp_asset_used, ydp_asset_unused, all_refracts, perc_amps_n_user, aprs,\
+    last_farm_apr, last_yluna_farm, up_to_today_emission = get_data(pe_dp, ystake_dp, refract_dp, 
                                             swaps_dp, lp_dp, collector_dp, ydp, pdp, xprism_amps_dp, aprs_dp)
 
 ###
@@ -157,6 +166,45 @@ perc_amps_chart = xPrismAmpsChart.chart(perc_amps_n_user)
 aprs_chart = APRSChart.chart(aprs)
 prism_emitted_chart = pe_cp.prism_emitted_chart(pe_dp.prism_emitted, pe_dp.prism_emitted_so_far, 
                        pe_dp.dates_to_mark, pe_dp.extra_dates_to_mark, '2022-05-25')
+
+col0,col1,col00,col2,col3,col4 = st.columns([0.1,1,0.1,0.75,0.75,0.1])
+with col1:
+    st.subheader('PRISM Farm')
+    st.markdown("""Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+    Ut enim ad minim veniam, quis nostrud exercitation ullamco 
+    laboris nisi ut aliquip ex ea commodo consequat.""")
+    st.markdown("""Duis aute irure dolor in reprehenderit in voluptate velit esse 
+    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
+    sunt in culpa qui officia deserunt mollit anim id est laborum.""")
+with col2:
+    st.text("")
+    st.text("")
+    st.text("")
+    st.text("")
+    st.text("")
+    st.text("")
+    st.metric(label="yLuna in Prism Farm", value=f"{last_yluna_farm}M")
+    days_left = 365-(datetime.date.today() - datetime.date(2022, 3, 5)).days
+    st.metric(label="Days Left in Prism Farm", value=f"{days_left}")
+with col3:
+    st.text("")
+    st.text("")
+    st.text("")
+    st.text("")
+    st.text("")
+    st.text("")
+    days_left = 365-(datetime.date.today() - datetime.date(2022, 3, 5)).days
+    st.metric(label="Prisms emitted so far", value=f"{up_to_today_emission}%")
+    st.metric(label="Prism Farm APR", value=f"{last_farm_apr}%")
+
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
 col0,col1, col2 = st.columns([0.1,1,2])
 with col1:
     st.subheader('PRISM Farm Emission')
@@ -273,6 +321,12 @@ with col2:
 
 st.markdown("""
 <style>
+    label[data-testid="stMetricLabel"] {
+        text-align:center
+    }
+    div[data-testid="stMetricValue"] {
+        text-align:center
+    }
     @media (min-width:640px) {
         .block-container {
             padding-left: 5rem;

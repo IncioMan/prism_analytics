@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[60]:
+# In[7]:
 
 
 import pandas as pd
@@ -16,7 +16,7 @@ pd.set_option("display.max_rows", 400)
 alt.renderers.set_embed_options(theme='dark')
 
 
-# In[187]:
+# In[15]:
 
 
 class PrismEmittedDataProvider():
@@ -40,6 +40,7 @@ class PrismEmittedDataProvider():
         dates_to_mark.append((8000000,'100%',date_+datetime.timedelta(days=-shift),date_))
         date_ = datetime.datetime.today().date()
         perc = round(self.prism_emitted[self.prism_emitted.Date==str(date_)]['Total Prism'].values[0]/130000000,2)
+        self.up_to_today_emission = perc
         dates_to_mark.append((8000000,f'{perc}%',date_+datetime.timedelta(days=-shift),date_))
         dates_to_mark = pd.DataFrame(dates_to_mark,columns=['height','text','text_date','Date'])
         dates_to_mark.Date = dates_to_mark.Date.apply(str)
@@ -76,13 +77,7 @@ class PrismEmittedDataProvider():
         self.prism_emitted_so_far = df[df.Date<=str(datetime.datetime.today().date())]
 
 
-# In[188]:
-
-
-pe_dp = PrismEmittedDataProvider()
-
-
-# In[189]:
+# In[16]:
 
 
 class PrismEmittedChartProvider:
@@ -151,24 +146,3 @@ class PrismEmittedChartProvider:
         return (so_far+trend_line+marks+lines+marks2+lines2)                .configure_mark(
                     color='#ffffff'
                 ).configure_axis(grid=False).configure_view(strokeOpacity=0)
-
-
-# In[194]:
-
-
-cp = PrismEmittedChartProvider()
-cp.prism_emitted_chart(pe_dp.prism_emitted, pe_dp.prism_emitted_so_far, 
-                       pe_dp.dates_to_mark, pe_dp.extra_dates_to_mark, '2022-05-25')
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-

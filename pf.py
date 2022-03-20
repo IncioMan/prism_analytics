@@ -165,7 +165,7 @@ aprs_chart = APRSChart.chart(aprs)
 prism_emitted_chart = pe_cp.prism_emitted_chart(pe_dp.prism_emitted, pe_dp.prism_emitted_so_far, 
                        pe_dp.dates_to_mark, pe_dp.extra_dates_to_mark, '2022-05-25')
 
-col0,col1,col00,col2,col3,col4 = st.columns([0.1,1,0.1,0.75,0.75,0.1])
+col0,col1,col00,col2,col3,col4 = st.columns([0.1,1,0.25,0.75,0.75,0.25])
 with col1:
     st.subheader('PRISM Farm')
     st.markdown("""Lorem ipsum dolor sit amet, consectetur adipiscing elit, 

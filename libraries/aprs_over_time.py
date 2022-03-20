@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[92]:
+# In[111]:
 
 
 import pandas as pd
 import altair as alt
 import warnings
+import numpy as np
 import requests
 warnings.filterwarnings("ignore")
 alt.renderers.set_embed_options(theme='light')
@@ -14,7 +15,7 @@ pd.set_option("display.max_colwidth", 400)
 pd.set_option("display.max_rows", 400)
 
 
-# In[93]:
+# In[98]:
 
 
 def claim(claim_hash):
@@ -25,7 +26,7 @@ def claim(claim_hash):
     return df
 
 
-# In[138]:
+# In[123]:
 
 
 class APRDataProvider:
@@ -44,13 +45,13 @@ class APRDataProvider:
         self.yluna_price_df = yluna_price_df
         self.luna_price_df = luna_price_df
         
-    def parse(self):
+    def parse(self, ystaking_farm_df):
         yluna = self.yluna_price_df[self.yluna_price_df.offer_asset=='yLuna']
         prism = self.yluna_price_df[self.yluna_price_df.offer_asset=='PRISM']
         df = yluna.merge(prism, on='day', suffixes=['_yluna','_prism'])
         df['yluna_price'] = (1/df.belief_price_prism) / df.belief_price_yluna
         prices = df
-        prices = prices.merge(self.luna_price_df, on='day')[['day','yluna_price','luna_price']]
+        prices = prices.merge(self.luna_price_df, on='day')[['day','yluna_price','belief_price_prism','luna_price']]
         prices['day'] = prices['day'].apply(lambda x: x[:-13])
         self.prices = prices
         
@@ -67,15 +68,26 @@ class APRDataProvider:
         prices_apr['yluna_apr'] = prices_apr.apr * prices_apr.luna_price / prices_apr.yluna_price
         yluna_apr = prices_apr[['day','yluna_apr']]
         yluna_apr.columns = ['Day','APR (%)']
-        yluna_apr['Asset'] = 'yLUNA'
+        yluna_apr['Staking Strategy'] = 'yLUNA normal staking'
         luna_apr = prices_apr[['day','apr']]
         luna_apr.columns = ['Day','APR (%)']
-        luna_apr['Asset'] = 'LUNA'
-        self.aprs = yluna_apr.append(luna_apr)
+        luna_apr['Staking Strategy'] = 'LUNA native staking'
+        self.prices_apr = prices_apr
+        
+        yluna_farm_daily = ystaking_farm_df.groupby('day').amount_signed.sum().cumsum().reset_index()
+        df = self.prices_apr
+        df = df.merge(yluna_farm_daily,on='day',how='left').fillna(0)
+        df['farm_apr'] = ((104000000*(1/df.belief_price_prism))/(df.amount_signed*df.yluna_price))
+        df['farm_apr'] = df['farm_apr'].replace([np.inf, -np.inf], 0)*100
+        farm_apr = df[['day','farm_apr']]
+        farm_apr.columns = ['Day','APR (%)']
+        farm_apr['Staking Strategy'] = 'yLUNA staking in Prism Farm'
+        
+        self.aprs = yluna_apr.append(luna_apr).append(farm_apr)
         self.aprs['APR (%)'] = self.aprs['APR (%)'].apply(lambda x: round(x,2))
 
 
-# In[142]:
+# In[124]:
 
 
 class APRSChart:
@@ -84,14 +96,15 @@ class APRSChart:
         return alt.Chart(aprs).mark_line(point=True).encode(
                  x=alt.X('Day:T', sort=alt.EncodingSortField(order='ascending')),
                  y="APR (%):Q",
-                color=alt.Color('Asset:N', 
+                color=alt.Color('Staking Strategy:N', 
                                 scale=alt.Scale(scheme='set2'),
                                 legend=alt.Legend(
-                                        orient='top-right',
+                                        orient='top-left',
                                         padding=5,
                                         legendY=0,
                                         direction='vertical')),
-                tooltip=[alt.Tooltip('Day:T', format='%Y-%m-%d'), 'Asset', 'APR (%)']
+                tooltip=[alt.Tooltip('Day:T', format='%Y-%m-%d'), 'Staking Strategy', 'APR (%)']
             ).properties(width=700).configure_axisX(
                 labelAngle=0
             ).configure_view(strokeOpacity=0)
+

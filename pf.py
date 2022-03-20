@@ -74,7 +74,7 @@ def get_data(pe_dp, ystake_dp, refract_dp, swaps_dp, lp_dp, collector_dp,
     lp_dp.parse()
     collector_dp.parse(lp_dp.withdraw_, lp_dp.provide_, swaps_dp.swaps_df_all)
     xprism_amps_dp.parse()
-    aprs_dp.parse()
+    aprs_dp.parse(ystake_dp.ystaking_farm_df)
     print("{} - Data parsed...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
 
     ydp.lp_delta(lp_dp.withdraw_[lp_dp.withdraw_.asset=='yLuna'],

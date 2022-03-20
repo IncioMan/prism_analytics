@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[111]:
+# In[132]:
 
 
 import pandas as pd
@@ -15,7 +15,7 @@ pd.set_option("display.max_colwidth", 400)
 pd.set_option("display.max_rows", 400)
 
 
-# In[98]:
+# In[133]:
 
 
 def claim(claim_hash):
@@ -26,7 +26,7 @@ def claim(claim_hash):
     return df
 
 
-# In[123]:
+# In[157]:
 
 
 class APRDataProvider:
@@ -44,6 +44,18 @@ class APRDataProvider:
         luna_price_df = luna_price_df.rename(columns={'price':'luna_price'})
         self.yluna_price_df = yluna_price_df
         self.luna_price_df = luna_price_df
+        
+        et_query = requests.get(
+            'https://api.extraterrestrial.money/v1/api/prices').json()
+        yluna_price = float(et_query['prices']['yLUNA']['price'])
+        farm_query = requests.get(
+            "https://lcd.terra.dev/terra/wasm/v1beta1/contracts/terra1p7jp8vlt57cf8qwazjg58qngwvarmszsamzaru/store?query_msg=ewogICJyZXdhcmRfaW5mbyI6IHsKICAgICJzdGFrZXJfYWRkciI6ICJ0ZXJyYTFuczVuc3Z0ZHh1NTNkd2R0aHkzeXhzNngzdzJoZjNmY2xoemxsYyIKICB9Cn0="
+        ).json()
+
+        yluna_bonded = float(farm_query['query_result']['staked_amount']) / 1e6
+        prism_price = float(et_query['prices']['PRISM']['price'])
+        self.last_yluna_farm = 104_000_000 * prism_price / (yluna_price *
+                                                              yluna_bonded) * 100
         
     def parse(self, ystaking_farm_df):
         yluna = self.yluna_price_df[self.yluna_price_df.offer_asset=='yLuna']
@@ -87,7 +99,7 @@ class APRDataProvider:
         self.aprs['APR (%)'] = self.aprs['APR (%)'].apply(lambda x: round(x,2))
 
 
-# In[124]:
+# In[158]:
 
 
 class APRSChart:

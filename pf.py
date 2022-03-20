@@ -95,9 +95,7 @@ def get_data(pe_dp, ystake_dp, refract_dp, swaps_dp, lp_dp, collector_dp,
     pdp.all_deltas = pdp.fill_date_gaps(pdp.all_deltas)
     pdp.unused_asset(pdp.all_deltas)
 
-    last_farm_apr = aprs_dp.aprs[(aprs_dp.aprs.Day==aprs_dp.aprs.Day.max())\
-                        &(aprs_dp.aprs['Staking Strategy']=='yLUNA staking in Prism Farm')]\
-                        ['APR (%)'].values[0]
+    last_farm_apr = aprs_dp.last_yluna_farm
     df = ydp.daily_delta_stk_farm
     last_yluna_farm= round(df[(df.Time==df.Time.max())\
             &(df['Type']=='yLuna Farm staked')]\
@@ -196,7 +194,7 @@ with col3:
     st.text("")
     days_left = 365-(datetime.date.today() - datetime.date(2022, 3, 5)).days
     st.metric(label="Prisms emitted so far", value=f"{up_to_today_emission}%")
-    st.metric(label="Prism Farm APR", value=f"{last_farm_apr}%")
+    st.metric(label="Prism Farm APR", value=f"{round(last_farm_apr,2)}%")
 
 st.text("")
 st.text("")
@@ -308,7 +306,7 @@ st.text("")
 
 col0, col1, col2 = st.columns([0.1,1,2])
 with col1:
-    st.subheader('xPRISM pldged to AMPs')
+    st.subheader('xPRISM pledged to AMPs')
     st.markdown("""Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
     sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
     Ut enim ad minim veniam, quis nostrud exercitation ullamco 

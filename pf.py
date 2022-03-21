@@ -168,13 +168,12 @@ prism_emitted_chart = pe_cp.prism_emitted_chart(pe_dp.prism_emitted, pe_dp.prism
 col0,col1,col00,col2,col3,col4 = st.columns([0.1,1,0.25,0.75,0.75,0.25])
 with col1:
     st.subheader('PRISM Farm')
-    st.markdown("""Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-    Ut enim ad minim veniam, quis nostrud exercitation ullamco 
-    laboris nisi ut aliquip ex ea commodo consequat.""")
-    st.markdown("""Duis aute irure dolor in reprehenderit in voluptate velit esse 
-    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
-    sunt in culpa qui officia deserunt mollit anim id est laborum.""")
+    st.markdown("""Prism Farm allows you to stake yLUNA in the 
+Prism Farm contract and receive $PRISM tokens in exchange for your yLUNA yield.
+130m PRISM tokens (13% of the total supply) will be available in the Prism Farm
+ event and will be farmed over a 12 month period. More info [here](https://prism-protocol.medium.com/prism-farm-is-launching-on-7th-march-f15c2f733671)""")
+    st.markdown("""How many yLuna have been staked into the Farm? How many days are left in the event?
+What is the current APR for participants?""")
 with col2:
     st.text("")
     st.text("")
@@ -206,13 +205,8 @@ st.text("")
 col0,col1, col2 = st.columns([0.1,1,2])
 with col1:
     st.subheader('PRISM Farm Emission')
-    st.markdown("""Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-    Ut enim ad minim veniam, quis nostrud exercitation ullamco 
-    laboris nisi ut aliquip ex ea commodo consequat.""")
-    st.markdown("""Duis aute irure dolor in reprehenderit in voluptate velit esse 
-    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
-    sunt in culpa qui officia deserunt mollit anim id est laborum.""")
+    st.markdown("""The 130m $PRISM tokens have been split into 2 pools, the Base Pool and the AMPS Boosted Pool. Initially 80% of the tokens will be allocated to the Base Pool and 20% of the tokens will be allocated to the AMPS Boosted Pool.""")
+    st.markdown("""What percentage has already been allocated? And how close are we to the unlock of the vested PRISM?""")
 with col2:
     st.altair_chart(prism_emitted_chart.properties(height=350), use_container_width=True)
 st.text("")
@@ -225,13 +219,8 @@ st.text("")
 col0, col1, col2 = st.columns([0.1,1,2])
 with col1:
     st.subheader('Staking APR')
-    st.markdown("""Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-    Ut enim ad minim veniam, quis nostrud exercitation ullamco 
-    laboris nisi ut aliquip ex ea commodo consequat.""")
-    st.markdown("""Duis aute irure dolor in reprehenderit in voluptate velit esse 
-    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
-    sunt in culpa qui officia deserunt mollit anim id est laborum.""")
+    st.markdown("""Prism allows to stake yLuna in normal staking, or Prism Farm. The two strategies yield different APRs and depend on the price of Luna, yLuna and the Prism token. Rewards from normal staking can be claimed in various tokens while the ones from Prism Farm is paid in PRISM tokens.""")
+    st.markdown("""What do the APRs from the different strategies look like over time? What is the most profitable one?""")
 with col2:
     st.text("")
     st.altair_chart(aprs_chart.properties(height=350), use_container_width=True)
@@ -246,13 +235,12 @@ st.text("")
 col1, col2, col0 = st.columns([2,1,0.1])
 with col2:
     st.subheader('yLUNA Usage')
-    st.markdown("""Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-    Ut enim ad minim veniam, quis nostrud exercitation ullamco 
-    laboris nisi ut aliquip ex ea commodo consequat.""")
-    st.markdown("""Duis aute irure dolor in reprehenderit in voluptate velit esse 
-    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
-    sunt in culpa qui officia deserunt mollit anim id est laborum.""")
+    st.markdown("""yLuna entitles the owner to the staking rewards of the underlying Luna and the eventual airdrops.
+Prism Farm is also a possibility to employ yLuna.
+yLuna can be also used to provide liquidity to the yLuna/PRISM pool. The rewards of yLuna which is not staked goes 100% to xPRISM holders.""")
+    st.markdown("""Where has yLuna been employed? 
+    How much yLuna is sitting idle? 
+    Has Prism Farm gained the largest share?""")
 with col1:
     st.altair_chart(yluna_chart, use_container_width=True)
 
@@ -266,13 +254,12 @@ st.text("")
 col1, col2, col0 = st.columns([2,1,0.1])
 with col2:
     st.subheader('pLUNA Usage')
-    st.markdown("""Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-    Ut enim ad minim veniam, quis nostrud exercitation ullamco 
-    laboris nisi ut aliquip ex ea commodo consequat.""")
-    st.markdown("""Duis aute irure dolor in reprehenderit in voluptate velit esse 
-    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
-    sunt in culpa qui officia deserunt mollit anim id est laborum.""")
+    st.markdown("""pLuna represents the principal component of the refracted Luna. 
+    Currently, it can only be used as liquidity in the pLuna/PRISM pool, 
+    but it will entitile the owner to several right including the governance power in the near future.""")
+    st.markdown("""Where is currently pLuna employed? 
+    Is most of it sitting unsed in wallets? 
+    How much is provided as liquidity in the pool?""")
 with col1:
     st.altair_chart(pluna_chart, use_container_width=True)
 
@@ -286,13 +273,13 @@ st.text("")
 col0, col1, col2 = st.columns([0.1,1,2])
 with col1:
     st.subheader('Refraction')
-    st.markdown("""Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-    Ut enim ad minim veniam, quis nostrud exercitation ullamco 
-    laboris nisi ut aliquip ex ea commodo consequat.""")
-    st.markdown("""Duis aute irure dolor in reprehenderit in voluptate velit esse 
-    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
-    sunt in culpa qui officia deserunt mollit anim id est laborum.""")
+    st.markdown("""In order to obtain yLuna and pLuna, users need to refract their Luna. 
+    In practice, this means that the refracted Luna is staked with one of Prism associated validators and cLuna is generated. 
+    cLuna can then be split in yLuna and pLuna. 
+    cLuna can be also obtained from the cLuna/PRISM liquidity pool - this is convinient when it is trading at a premium in the pool.""")
+    st.markdown("""How much Luna is refracted over time? 
+    What where the days on which most Luna was refracted?
+     And which ones saw a high number of Luna unrefracted?""")
 with col2:
     st.text("")
     st.altair_chart(cp.refraction_asset_time(all_refracts).properties(height=350), use_container_width=True)
@@ -306,17 +293,32 @@ st.text("")
 
 col0, col1, col2 = st.columns([0.1,1,2])
 with col1:
-    st.subheader('xPRISM pledged to AMPs')
-    st.markdown("""Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-    Ut enim ad minim veniam, quis nostrud exercitation ullamco 
-    laboris nisi ut aliquip ex ea commodo consequat.""")
-    st.markdown("""Duis aute irure dolor in reprehenderit in voluptate velit esse 
-    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
-    sunt in culpa qui officia deserunt mollit anim id est laborum.""")
+    st.subheader('xPRISM pldged to AMPs')
+    st.markdown("""To align the Prism Farmers' incentives with the incentives of 
+    long-term xPRISM holders, 
+    Prism has  introduced the amplified yields, called AMPS. 
+    AMPS enable users to signal their commitment and deposit $xPRISM 
+    tokens into a boosting vault.
+Committing more xPRISM tokens and over a longer period of time 
+will earn more AMPS and consequently earn even higher yields in PRISM 
+Farm.""")
+    st.markdown("""How much of their xPrism holdings have users committed to AMPs?""")
 with col2:
     st.altair_chart(perc_amps_chart.properties(height=350), use_container_width=True)
 
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.markdown(f"""
+<div style=\"width: 100%; text-align: center\">
+    <img src="https://raw.githubusercontent.com/IncioMan/prism_analytics/main/images/prism_white_small.png" width=\"35px\" style=\"margin-right:5px\">
+    <a href="https://flipsidecrypto.xyz"><img src="https://raw.githubusercontent.com/IncioMan/mars_lockdrop/master//images/fc.png" width=\"30px\"></a>
+    <a href="https://twitter.com/IncioMan"><img src="https://raw.githubusercontent.com/IncioMan/mars_lockdrop/master//images/twitter.png" width=\"50px\"></a>
+</div>
+""", unsafe_allow_html=True)
 st.markdown("""
 <style>
     label[data-testid="stMetricLabel"] {
@@ -339,7 +341,7 @@ st.markdown("""
     }
     .block-container
     {
-        padding-bottom: 1rem;
+        padding-bottom: 0.01rem;
         padding-top: 5rem;
     }
 </style>

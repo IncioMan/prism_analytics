@@ -171,7 +171,7 @@ with col1:
     st.markdown("""Prism Farm allows you to stake yLUNA in the 
 Prism Farm contract and receive $PRISM tokens in exchange for your yLUNA yield.
 130m PRISM tokens (13% of the total supply) will be available in the Prism Farm
- event and will be farmed over a 12 month period. More info [here](https://prism-protocol.medium.com/prism-farm-is-launching-on-7th-march-f15c2f733671)""")
+ event and will be farmed over a 12 month period. More info [here](https://prism-protocol.medium.com/prism-farm-is-launching-on-7th-march-f15c2f733671).""")
     st.markdown("""How many yLuna have been staked into the Farm? How many days are left in the event?
 What is the current APR for participants?""")
 with col2:
@@ -219,7 +219,7 @@ st.text("")
 col0, col1, col2 = st.columns([0.1,1,2])
 with col1:
     st.subheader('Staking APR')
-    st.markdown("""Prism allows to stake yLuna in normal staking, or Prism Farm. The two strategies yield different APRs and depend on the price of Luna, yLuna and the Prism token. Rewards from normal staking can be claimed in various tokens while the ones from Prism Farm is paid in PRISM tokens.""")
+    st.markdown("""Prism allows to stake yLuna in normal staking, or Prism Farm. The two strategies yield different APRs and depend on the price of Luna, yLuna and the Prism token. Rewards from normal staking can be claimed in various tokens while the ones from Prism Farm are paid in PRISM tokens.""")
     st.markdown("""What do the APRs from the different strategies look like over time? What is the most profitable one?""")
 with col2:
     st.text("")
@@ -236,7 +236,7 @@ col1, col2, col0 = st.columns([2,1,0.1])
 with col2:
     st.subheader('yLUNA Usage')
     st.markdown("""yLuna entitles the owner to the staking rewards of the underlying Luna and the eventual airdrops.
-Prism Farm is also a possibility to employ yLuna.
+Prism Farm is also a valid way to employ yLuna.
 yLuna can be also used to provide liquidity to the yLuna/PRISM pool. The rewards of yLuna which is not staked goes 100% to xPRISM holders.""")
     st.markdown("""Where has yLuna been employed? 
     How much yLuna is sitting idle? 
@@ -256,7 +256,7 @@ with col2:
     st.subheader('pLUNA Usage')
     st.markdown("""pLuna represents the principal component of the refracted Luna. 
     Currently, it can only be used as liquidity in the pLuna/PRISM pool, 
-    but it will entitile the owner to several right including the governance power in the near future.""")
+    but it will entitle the owner to several rights including the governance voting power in the near future.""")
     st.markdown("""Where is currently pLuna employed? 
     Is most of it sitting unsed in wallets? 
     How much is provided as liquidity in the pool?""")
@@ -282,6 +282,7 @@ with col1:
      And which ones saw a high number of Luna unrefracted?""")
 with col2:
     st.text("")
+    st.text("")
     st.altair_chart(cp.refraction_asset_time(all_refracts).properties(height=350), use_container_width=True)
 
 st.text("")
@@ -296,14 +297,16 @@ with col1:
     st.subheader('xPRISM pldged to AMPs')
     st.markdown("""To align the Prism Farmers' incentives with the incentives of 
     long-term xPRISM holders, 
-    Prism has  introduced the amplified yields, called AMPS. 
-    AMPS enable users to signal their commitment and deposit $xPRISM 
+    Prism has  introduced the amplified yields, called AMPS.
+     AMPS enable users to signal their commitment and deposit $xPRISM 
     tokens into a boosting vault.
 Committing more xPRISM tokens and over a longer period of time 
 will earn more AMPS and consequently earn even higher yields in PRISM 
 Farm.""")
     st.markdown("""How much of their xPrism holdings have users committed to AMPs?""")
 with col2:
+    st.text("")
+    st.text("")
     st.altair_chart(perc_amps_chart.properties(height=350), use_container_width=True)
 
 st.text("")

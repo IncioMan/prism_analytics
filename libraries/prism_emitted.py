@@ -39,7 +39,7 @@ class PrismEmittedDataProvider():
         date_ = start_farm+datetime.timedelta(days=int(365))
         dates_to_mark.append((8000000,'100%',date_+datetime.timedelta(days=-shift),date_))
         date_ = datetime.datetime.today().date()
-        perc = round(self.prism_emitted[self.prism_emitted.Date==str(date_)]['Total Prism'].values[0]/130000,2)
+        perc = round(self.prism_emitted[self.prism_emitted.Date==str(date_)]['Total Prism'].values[0]/1300000,2)
         self.up_to_today_emission = perc
         dates_to_mark.append((8000000,f'{perc}%',date_+datetime.timedelta(days=-shift),date_))
         dates_to_mark = pd.DataFrame(dates_to_mark,columns=['height','text','text_date','Date'])

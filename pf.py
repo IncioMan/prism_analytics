@@ -179,12 +179,10 @@ with col2:
     st.text("")
     st.text("")
     st.text("")
-    st.text("")
     st.metric(label="yLuna in Prism Farm", value=f"{last_yluna_farm}M")
     days_left = 365-(datetime.date.today() - datetime.date(2022, 3, 5)).days
     st.metric(label="Days Left in Prism Farm", value=f"{days_left}")
 with col3:
-    st.text("")
     st.text("")
     st.text("")
     st.text("")

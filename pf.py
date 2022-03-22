@@ -111,12 +111,14 @@ def get_data(pe_dp, ystake_dp, refract_dp, swaps_dp, lp_dp, collector_dp,
     return pe_dp.prism_emitted, pe_dp.prism_emitted_so_far, pe_dp.dates_to_mark,\
            pdp.dates_to_mark, pdp.asset_used, pdp.asset_unused, ydp.dates_to_mark,\
            ydp.asset_used, ydp.asset_unused, refract_dp.all_refreact, xprism_amps_dp.perc_amps_n_user,\
-           aprs_dp.aprs, last_farm_apr, last_yluna_farm, pe_dp.up_to_today_emission, amps_dp.amps
+           aprs_dp.aprs, last_farm_apr, last_yluna_farm, pe_dp.up_to_today_emission, amps_dp.amps,\
+               amps_dp.boost_apr_median, ystake_dp.ystaking_farm_df.sender.nunique()
 
 pe_dp_prism_emitted, pe_dp_prism_emitted_so_far, pe_dp_dates_to_mark,\
 pdp_dates_to_mark, pdp_asset_used, pdp_asset_unused, ydp_dates_to_mark,\
 ydp_asset_used, ydp_asset_unused, all_refracts, perc_amps_n_user, aprs,\
-    last_farm_apr, last_yluna_farm, up_to_today_emission, amps = get_data(pe_dp, ystake_dp, refract_dp, 
+    last_farm_apr, last_yluna_farm, up_to_today_emission, amps,\
+        boost_apr_median, farm_users = get_data(pe_dp, ystake_dp, refract_dp, 
                                             swaps_dp, lp_dp, collector_dp, ydp, pdp, 
                                             xprism_amps_dp, aprs_dp, amps_dp)
 
@@ -174,6 +176,19 @@ aprs_chart = APRSChart.chart(aprs)
 prism_emitted_chart = pe_cp.prism_emitted_chart(pe_dp.prism_emitted, pe_dp.prism_emitted_so_far, 
                        pe_dp.dates_to_mark, pe_dp.extra_dates_to_mark, '2022-05-25')
 
+st.markdown(f"""
+<div style=\"width: 100%; text-align: center\">
+    <a href='https://prismprotocol.app/'><img src="https://raw.githubusercontent.com/IncioMan/prism_analytics/main/images/prism_white_small.png" width=\"35px\" style=\"margin-right:5px\"></a>
+    <a href="https://flipsidecrypto.xyz"><img src="https://raw.githubusercontent.com/IncioMan/mars_lockdrop/master//images/fc.png" width=\"30px\"></a>
+    <a href="https://twitter.com/IncioMan"><img src="https://raw.githubusercontent.com/IncioMan/mars_lockdrop/master//images/twitter.png" width=\"50px\"></a>
+</div>
+""", unsafe_allow_html=True)
+
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
 col0,col1,col00,col2,col3,col4 = st.columns([0.1,1,0.25,0.75,0.75,0.25])
 with col1:
     st.subheader('PRISM Farm')
@@ -187,20 +202,18 @@ with col2:
     st.text("")
     st.text("")
     st.text("")
-    st.text("")
-    st.text("")
-    st.metric(label="yLuna in Prism Farm", value=f"{last_yluna_farm}M")
     days_left = 365-(datetime.date.today() - datetime.date(2022, 3, 5)).days
+    st.metric(label="Prism Farm APR", value=f"{round(last_farm_apr,2)}%")
     st.metric(label="Days Left in Prism Farm", value=f"{days_left}")
+    st.metric(label="yLuna in Prism Farm", value=f"{last_yluna_farm}M")
 with col3:
     st.text("")
     st.text("")
     st.text("")
-    st.text("")
-    st.text("")
     days_left = 365-(datetime.date.today() - datetime.date(2022, 3, 5)).days
+    st.metric(label="Boost Median APR", value=f"{round(boost_apr_median,2)}%")
+    st.metric(label="Prism Farm Participants", value=f"{farm_users}")
     st.metric(label="Prisms emitted so far", value=f"{up_to_today_emission}%")
-    st.metric(label="Prism Farm APR", value=f"{round(last_farm_apr,2)}%")
 
 st.text("")
 st.text("")
@@ -216,41 +229,6 @@ with col1:
     st.markdown("""What percentage has already been allocated? And how close are we to the unlock of the vested PRISM?""")
 with col2:
     st.altair_chart(prism_emitted_chart.properties(height=350), use_container_width=True)
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-
-col0,col1, col2 = st.columns([0.1,1,2])
-with col1:
-    st.subheader('User Pledging')
-    st.markdown("""Prism Farm rewards users which pledge their xPRISM and stake yLUNA. By pledging
-    xPRISM users earn AMPs, a non-tradable token. AMPs accumulate as long as the user keeps its 
-    xPRISM pledged and resets as soon as she unpledges.""")
-    st.markdown("""What users have pledge the most xPRISM? How long have they been pledging for? Have they also staked many yLUNA?""")
-with col2:
-    st.altair_chart(amps_cp.time_xprism_yluna(amps).properties(height=350), use_container_width=True)
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-
-col0,col1, col2 = st.columns([0.1,1,2])
-with col1:
-    st.subheader('Time Pledged')
-    st.markdown("""
-        AMPS create an incentive for users to keep their xPRISM pledged,
-        since unpledging causes the amount of AMPS accumulated to reset. In this chart
-        we look at the distribution of the number of users according to the amount of days 
-        they have been pledging for. 
-    """)
-    st.markdown("""Have most users been pledging since day one? Can we observe many users who have just (re)pledged?""")
-with col2:
-    st.altair_chart(amps_cp.users_days_pledged(amps).properties(height=350), use_container_width=True)
 st.text("")
 st.text("")
 st.text("")
@@ -295,9 +273,44 @@ st.text("")
 st.text("")
 st.text("")
 
+col0,col1, col2 = st.columns([0.1,1,2])
+with col1:
+    st.subheader('Time Pledged')
+    st.markdown("""
+        AMPS create an incentive for users to keep their xPRISM pledged,
+        since unpledging causes the amount of AMPS accumulated to reset. In this chart
+        we look at the distribution of the number of users according to the amount of days 
+        they have been pledging for. 
+    """)
+    st.markdown("""Have most users been pledging since day one? Can we observe many users who have just (re)pledged?""")
+with col2:
+    st.altair_chart(amps_cp.users_days_pledged(amps).properties(height=350), use_container_width=True)
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
 
 col0,col1, col2 = st.columns([0.1,1,2])
 with col1:
+    st.subheader('User Pledging')
+    st.markdown("""Prism Farm rewards users which pledge their xPRISM and stake yLUNA. By pledging
+    xPRISM users earn AMPs, a non-tradable token. AMPs accumulate as long as the user keeps its 
+    xPRISM pledged and resets as soon as she unpledges.""")
+    st.markdown("""What users have pledge the most xPRISM? How long have they been pledging for? Have they also staked many yLUNA?""")
+with col2:
+    st.altair_chart(amps_cp.time_xprism_yluna(amps).properties(height=350), use_container_width=True)
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
+
+col1,col2, col0 = st.columns([2,1,0.1])
+with col2:
     st.subheader('Amount xPRISM Pledged')
     st.markdown("""
     Users who have pledged xPRISM for long time have also accumulated AMPS as a result of it.
@@ -308,7 +321,7 @@ with col1:
     st.markdown("""
     How many xPRISM have been pledged since day 1?
     """)
-with col2:
+with col1:
     st.altair_chart(amps_cp.xprisms_days_pledged(amps).properties(height=350), use_container_width=True)
 st.text("")
 st.text("")
@@ -318,9 +331,9 @@ st.text("")
 st.text("")
 
 
-col0, col1, col2 = st.columns([0.1,1,2])
-with col1:
-    st.subheader('xPRISM pldged to AMPs')
+col1,col2, col0 = st.columns([2,1,0.1])
+with col2:
+    st.subheader('xPRISM pledged to AMPs')
     st.markdown("""To align the Prism Farmers' incentives with the incentives of 
     long-term xPRISM holders, 
     Prism has  introduced the amplified yields, called AMPS.
@@ -330,7 +343,7 @@ Committing more xPRISM tokens and over a longer period of time
 will earn more AMPS and consequently earn even higher yields in PRISM 
 Farm.""")
     st.markdown("""How much of their xPrism holdings have users committed to AMPs?""")
-with col2:
+with col1:
     st.text("")
     st.text("")
     st.altair_chart(perc_amps_chart.properties(height=350), use_container_width=True)
@@ -423,7 +436,7 @@ st.text("")
 
 st.markdown(f"""
 <div style=\"width: 100%; text-align: center\">
-    <img src="https://raw.githubusercontent.com/IncioMan/prism_analytics/main/images/prism_white_small.png" width=\"35px\" style=\"margin-right:5px\">
+    <a href='https://prismprotocol.app/'><img src="https://raw.githubusercontent.com/IncioMan/prism_analytics/main/images/prism_white_small.png" width=\"35px\" style=\"margin-right:5px\"></a>
     <a href="https://flipsidecrypto.xyz"><img src="https://raw.githubusercontent.com/IncioMan/mars_lockdrop/master//images/fc.png" width=\"30px\"></a>
     <a href="https://twitter.com/IncioMan"><img src="https://raw.githubusercontent.com/IncioMan/mars_lockdrop/master//images/twitter.png" width=\"50px\"></a>
 </div>
@@ -451,7 +464,7 @@ st.markdown("""
     .block-container
     {
         padding-bottom: 0.01rem;
-        padding-top: 5rem;
+        padding-top: 2rem;
     }
 </style>
 """, unsafe_allow_html=True)

@@ -232,9 +232,6 @@ print(len(df_claim))
 pool = ThreadPool(4)  # Make the Pool of workers
 addresses = []
 for _, user_address in df_claim['USER_ADDR'].iteritems():
-    if(i<4900):
-        i+=1
-        continue
     addresses.append(user_address) 
     if(i%20==0):
         pool = ThreadPool(4)  # Make the Pool of workers
@@ -247,11 +244,11 @@ for _, user_address in df_claim['USER_ADDR'].iteritems():
     if(i%100==0):
         print(f"{str(datetime.datetime.now()).split('.')[0]} - Processed {i} out of {len(df_claim)}", flush=True)
         df = pd.DataFrame(data, columns=cols)
-        df.to_csv(f'data/amps_{today}.csv')
+        df.to_csv(f'data/amps/amps_{today}.csv')
     i+=1
 pool = ThreadPool(4)  # Make the Pool of workers
 print(f"{str(datetime.datetime.now()).split('.')[0]} - Processing {len(addresses)} addresses", flush=True)
 results = pool.map(get_amps_data, addresses) #Open the urls in their own threads
 data = [*data,*results]
 df = pd.DataFrame(data, columns=cols)
-df.to_csv(f'data/amps_{today}.csv')
+df.to_csv(f'data/amps/amps_{today}.csv')

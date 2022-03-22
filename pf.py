@@ -239,20 +239,6 @@ st.text("")
 
 col0,col1, col2 = st.columns([0.1,1,2])
 with col1:
-    st.subheader('Boost APR')
-    st.markdown("""The 130m $PRISM tokens have been split into 2 pools, the Base Pool and the AMPS Boosted Pool. Initially 80% of the tokens will be allocated to the Base Pool and 20% of the tokens will be allocated to the AMPS Boosted Pool.""")
-    st.markdown("""What percentage has already been allocated? And how close are we to the unlock of the vested PRISM?""")
-with col2:
-    st.altair_chart(amps_cp.users_boost_apr(amps).properties(height=350), use_container_width=True)
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-
-col0,col1, col2 = st.columns([0.1,1,2])
-with col1:
     st.subheader('Time Pledged')
     st.markdown("""The 130m $PRISM tokens have been split into 2 pools, the Base Pool and the AMPS Boosted Pool. Initially 80% of the tokens will be allocated to the Base Pool and 20% of the tokens will be allocated to the AMPS Boosted Pool.""")
     st.markdown("""What percentage has already been allocated? And how close are we to the unlock of the vested PRISM?""")
@@ -265,12 +251,27 @@ st.text("")
 st.text("")
 st.text("")
 
-col0,col1, col2 = st.columns([0.1,1,2])
+col1,col2, col0 = st.columns([2,1,0.1])
+with col2:
+    st.subheader('Boost APR')
+    st.markdown("""The 130m $PRISM tokens have been split into 2 pools, the Base Pool and the AMPS Boosted Pool. Initially 80% of the tokens will be allocated to the Base Pool and 20% of the tokens will be allocated to the AMPS Boosted Pool.""")
+    st.markdown("""What percentage has already been allocated? And how close are we to the unlock of the vested PRISM?""")
 with col1:
+    st.altair_chart(amps_cp.users_boost_apr(amps).properties(height=350), use_container_width=True)
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
+
+col1,col2, col0 = st.columns([2,1,0.1])
+with col2:
     st.subheader('Daily Rewards')
     st.markdown("""The 130m $PRISM tokens have been split into 2 pools, the Base Pool and the AMPS Boosted Pool. Initially 80% of the tokens will be allocated to the Base Pool and 20% of the tokens will be allocated to the AMPS Boosted Pool.""")
     st.markdown("""What percentage has already been allocated? And how close are we to the unlock of the vested PRISM?""")
-with col2:
+with col1:
     st.altair_chart(amps_cp.users_daily_rewards(amps).properties(height=350), use_container_width=True)
 st.text("")
 st.text("")
@@ -278,6 +279,7 @@ st.text("")
 st.text("")
 st.text("")
 st.text("")
+
 
 col0,col1, col2 = st.columns([0.1,1,2])
 with col1:
@@ -292,6 +294,33 @@ st.text("")
 st.text("")
 st.text("")
 st.text("")
+
+
+col0, col1, col2 = st.columns([0.1,1,2])
+with col1:
+    st.subheader('xPRISM pldged to AMPs')
+    st.markdown("""To align the Prism Farmers' incentives with the incentives of 
+    long-term xPRISM holders, 
+    Prism has  introduced the amplified yields, called AMPS.
+     AMPS enable users to signal their commitment and deposit $xPRISM 
+    tokens into a boosting vault.
+Committing more xPRISM tokens and over a longer period of time 
+will earn more AMPS and consequently earn even higher yields in PRISM 
+Farm.""")
+    st.markdown("""How much of their xPrism holdings have users committed to AMPs?""")
+with col2:
+    st.text("")
+    st.text("")
+    st.altair_chart(perc_amps_chart.properties(height=350), use_container_width=True)
+
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
+
     
 
 col0, col1, col2 = st.columns([0.1,1,2])
@@ -302,6 +331,28 @@ with col1:
 with col2:
     st.text("")
     st.altair_chart(aprs_chart.properties(height=350), use_container_width=True)
+
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
+col0, col1, col2 = st.columns([0.1,1,2])
+with col1:
+    st.subheader('Refraction')
+    st.markdown("""In order to obtain yLuna and pLuna, users need to refract their Luna. 
+    In practice, this means that the refracted Luna is staked with one of Prism associated validators and cLuna is generated. 
+    cLuna can then be split in yLuna and pLuna. 
+    cLuna can be also obtained from the cLuna/PRISM liquidity pool - this is convinient when it is trading at a premium in the pool.""")
+    st.markdown("""How much Luna is refracted over time? 
+    What where the days on which most Luna was refracted?
+     And which ones saw a high number of Luna unrefracted?""")
+with col2:
+    st.text("")
+    st.text("")
+    st.altair_chart(cp.refraction_asset_time(all_refracts).properties(height=350), use_container_width=True)
 
 st.text("")
 st.text("")
@@ -348,51 +399,6 @@ st.text("")
 st.text("")
 st.text("")
 
-col0, col1, col2 = st.columns([0.1,1,2])
-with col1:
-    st.subheader('Refraction')
-    st.markdown("""In order to obtain yLuna and pLuna, users need to refract their Luna. 
-    In practice, this means that the refracted Luna is staked with one of Prism associated validators and cLuna is generated. 
-    cLuna can then be split in yLuna and pLuna. 
-    cLuna can be also obtained from the cLuna/PRISM liquidity pool - this is convinient when it is trading at a premium in the pool.""")
-    st.markdown("""How much Luna is refracted over time? 
-    What where the days on which most Luna was refracted?
-     And which ones saw a high number of Luna unrefracted?""")
-with col2:
-    st.text("")
-    st.text("")
-    st.altair_chart(cp.refraction_asset_time(all_refracts).properties(height=350), use_container_width=True)
-
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-
-col0, col1, col2 = st.columns([0.1,1,2])
-with col1:
-    st.subheader('xPRISM pldged to AMPs')
-    st.markdown("""To align the Prism Farmers' incentives with the incentives of 
-    long-term xPRISM holders, 
-    Prism has  introduced the amplified yields, called AMPS.
-     AMPS enable users to signal their commitment and deposit $xPRISM 
-    tokens into a boosting vault.
-Committing more xPRISM tokens and over a longer period of time 
-will earn more AMPS and consequently earn even higher yields in PRISM 
-Farm.""")
-    st.markdown("""How much of their xPrism holdings have users committed to AMPs?""")
-with col2:
-    st.text("")
-    st.text("")
-    st.altair_chart(perc_amps_chart.properties(height=350), use_container_width=True)
-
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-st.text("")
 st.markdown(f"""
 <div style=\"width: 100%; text-align: center\">
     <img src="https://raw.githubusercontent.com/IncioMan/prism_analytics/main/images/prism_white_small.png" width=\"35px\" style=\"margin-right:5px\">

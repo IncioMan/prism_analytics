@@ -1,3 +1,4 @@
+import imp
 import streamlit as st
 import pandas as pd
 import altair as alt
@@ -8,6 +9,7 @@ from libraries.prism_analytics import DataProvider, ChartProvider, LPDataProvide
 from libraries.prism_emitted import PrismEmittedChartProvider, PrismEmittedDataProvider
 from libraries.xPrismAmps_from_urls import xPrismAmpsChart, xPrismAMPsDP
 from libraries.aprs_over_time import APRSChart, APRDataProvider
+from libraries.amps_analytics import AMPSChart, AMPSDataProvider
 
 
 st.set_page_config(page_title="Prism Farm - Analytics",\
@@ -36,10 +38,12 @@ lp_dp = LPDataProvider(claim,get_url,'./data')
 collector_dp = CollectorDataProvider(claim,get_url,'./data')
 xprism_amps_dp = xPrismAMPsDP(claim)
 aprs_dp = APRDataProvider(claim)
+amps_dp = AMPSDataProvider('./data/amps')
 ydp = DataProvider('yLuna')
 pdp = DataProvider('pLuna')
 pe_dp = PrismEmittedDataProvider()
 pe_cp = PrismEmittedChartProvider()
+amps_cp = AMPSChart()
 
 @st.cache(ttl=30000, show_spinner=False, allow_output_mutation=True)
 def get_data(pe_dp, ystake_dp, refract_dp, swaps_dp, lp_dp, collector_dp, 
@@ -58,8 +62,11 @@ def get_data(pe_dp, ystake_dp, refract_dp, swaps_dp, lp_dp, collector_dp,
     xprism_amps_dp.load()
     print("{} - Loading data: aprs_dp...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
     aprs_dp.load()
+    print("{} - Loading data: amps_dp...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
+    amps_dp.load()
     print("{} - Data Loaded...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
-      
+    
+
     if(to_csv):    
         ystake_dp.write_to_csv()
         refract_dp.write_to_csv()
@@ -75,6 +82,7 @@ def get_data(pe_dp, ystake_dp, refract_dp, swaps_dp, lp_dp, collector_dp,
     collector_dp.parse(lp_dp.withdraw_, lp_dp.provide_, swaps_dp.swaps_df_all)
     xprism_amps_dp.parse()
     aprs_dp.parse(ystake_dp.ystaking_farm_df)
+    amps_dp.parse()
     print("{} - Data parsed...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
 
     ydp.lp_delta(lp_dp.withdraw_[lp_dp.withdraw_.asset=='yLuna'],
@@ -103,13 +111,14 @@ def get_data(pe_dp, ystake_dp, refract_dp, swaps_dp, lp_dp, collector_dp,
     return pe_dp.prism_emitted, pe_dp.prism_emitted_so_far, pe_dp.dates_to_mark,\
            pdp.dates_to_mark, pdp.asset_used, pdp.asset_unused, ydp.dates_to_mark,\
            ydp.asset_used, ydp.asset_unused, refract_dp.all_refreact, xprism_amps_dp.perc_amps_n_user,\
-           aprs_dp.aprs, last_farm_apr, last_yluna_farm, pe_dp.up_to_today_emission
+           aprs_dp.aprs, last_farm_apr, last_yluna_farm, pe_dp.up_to_today_emission, amps_dp.amps
 
 pe_dp_prism_emitted, pe_dp_prism_emitted_so_far, pe_dp_dates_to_mark,\
 pdp_dates_to_mark, pdp_asset_used, pdp_asset_unused, ydp_dates_to_mark,\
 ydp_asset_used, ydp_asset_unused, all_refracts, perc_amps_n_user, aprs,\
-    last_farm_apr, last_yluna_farm, up_to_today_emission = get_data(pe_dp, ystake_dp, refract_dp, 
-                                            swaps_dp, lp_dp, collector_dp, ydp, pdp, xprism_amps_dp, aprs_dp)
+    last_farm_apr, last_yluna_farm, up_to_today_emission, amps = get_data(pe_dp, ystake_dp, refract_dp, 
+                                            swaps_dp, lp_dp, collector_dp, ydp, pdp, 
+                                            xprism_amps_dp, aprs_dp, amps_dp)
 
 ###
 ###
@@ -213,6 +222,77 @@ st.text("")
 st.text("")
 st.text("")
 st.text("")
+
+col0,col1, col2 = st.columns([0.1,1,2])
+with col1:
+    st.subheader('PRISM Farm Emission')
+    st.markdown("""The 130m $PRISM tokens have been split into 2 pools, the Base Pool and the AMPS Boosted Pool. Initially 80% of the tokens will be allocated to the Base Pool and 20% of the tokens will be allocated to the AMPS Boosted Pool.""")
+    st.markdown("""What percentage has already been allocated? And how close are we to the unlock of the vested PRISM?""")
+with col2:
+    st.altair_chart(amps_cp.time_xprism_yluna(amps).properties(height=350), use_container_width=True)
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
+col0,col1, col2 = st.columns([0.1,1,2])
+with col1:
+    st.subheader('PRISM Farm Emission')
+    st.markdown("""The 130m $PRISM tokens have been split into 2 pools, the Base Pool and the AMPS Boosted Pool. Initially 80% of the tokens will be allocated to the Base Pool and 20% of the tokens will be allocated to the AMPS Boosted Pool.""")
+    st.markdown("""What percentage has already been allocated? And how close are we to the unlock of the vested PRISM?""")
+with col2:
+    st.altair_chart(amps_cp.users_boost_apr(amps).properties(height=350), use_container_width=True)
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
+col0,col1, col2 = st.columns([0.1,1,2])
+with col1:
+    st.subheader('PRISM Farm Emission')
+    st.markdown("""The 130m $PRISM tokens have been split into 2 pools, the Base Pool and the AMPS Boosted Pool. Initially 80% of the tokens will be allocated to the Base Pool and 20% of the tokens will be allocated to the AMPS Boosted Pool.""")
+    st.markdown("""What percentage has already been allocated? And how close are we to the unlock of the vested PRISM?""")
+with col2:
+    st.altair_chart(amps_cp.users_days_pledged(amps).properties(height=350), use_container_width=True)
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
+col0,col1, col2 = st.columns([0.1,1,2])
+with col1:
+    st.subheader('PRISM Farm Emission')
+    st.markdown("""The 130m $PRISM tokens have been split into 2 pools, the Base Pool and the AMPS Boosted Pool. Initially 80% of the tokens will be allocated to the Base Pool and 20% of the tokens will be allocated to the AMPS Boosted Pool.""")
+    st.markdown("""What percentage has already been allocated? And how close are we to the unlock of the vested PRISM?""")
+with col2:
+    st.altair_chart(amps_cp.users_daily_rewards(amps).properties(height=350), use_container_width=True)
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
+col0,col1, col2 = st.columns([0.1,1,2])
+with col1:
+    st.subheader('PRISM Farm Emission')
+    st.markdown("""The 130m $PRISM tokens have been split into 2 pools, the Base Pool and the AMPS Boosted Pool. Initially 80% of the tokens will be allocated to the Base Pool and 20% of the tokens will be allocated to the AMPS Boosted Pool.""")
+    st.markdown("""What percentage has already been allocated? And how close are we to the unlock of the vested PRISM?""")
+with col2:
+    st.altair_chart(amps_cp.xprisms_days_pledged(amps).properties(height=350), use_container_width=True)
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+    
 
 col0, col1, col2 = st.columns([0.1,1,2])
 with col1:

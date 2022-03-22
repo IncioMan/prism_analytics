@@ -53,7 +53,7 @@ class AMPSDataProvider:
         self.amps = df
 
 
-# In[181]:
+# In[276]:
 
 
 class AMPSChart:
@@ -95,7 +95,7 @@ class AMPSChart:
             x=alt.X(cols_dict['boost_accrual_start_time_days']+":Q"),
             href='url:N',
             color=alt.Color(cols_dict['user_yluna'],
-                scale=alt.Scale(scheme='redpurple'),
+                scale=alt.Scale(scheme='redpurple', domain=[0,df2[cols_dict['user_yluna']].max()/20]),
                 legend=alt.Legend(
                             orient='top-left',
                             padding=0,
@@ -138,6 +138,7 @@ class AMPSChart:
         cols_dict = self.cols_dict
         df2 = df.copy().fillna(0)
         df2['boost_apr'] = df2['boost_apr'].apply(lambda x: 0 if int(x/10)*10 == 0 else int(x/10)*10)
+        df2 = df2[df2['boost_apr']>0]
         df2['n_addr'] = df2['addr']
         df2 = df2.groupby('boost_apr').n_addr.count().reset_index()
         df2 = df2.rename(columns=cols_dict)
@@ -154,13 +155,13 @@ class AMPSChart:
     def users_days_pledged(self,df):
         cols_dict = self.cols_dict
         df2 = df.boost_accrual_start_time_days.apply(int).value_counts().reset_index()
-        df2 = df2.rename(columns=cols_dict)
+        df2.columns = ['Current number of days pledged for','Number of users']
         chart = alt.Chart(df2).mark_bar().encode(
-            x=alt.X(cols_dict['index']+':N', \
-                    scale=alt.Scale(domain=list(range(df2[cols_dict['index']].max()+1))),\
+            x=alt.X('Current number of days pledged for'+':N', \
+                    scale=alt.Scale(domain=list(range(df2['Current number of days pledged for'].max()+1))),\
                     axis=alt.Axis(tickCount=10, labelAngle=0, tickBand = 'center')),
-            y=cols_dict['boost_accrual_start_time_days']+":Q",
-            tooltip=[cols_dict['index'],cols_dict['boost_accrual_start_time_days']+":Q"]
+            y='Number of users'+":Q",
+            tooltip=['Current number of days pledged for','Number of users'+":Q"]
         ).configure_mark(
             color='#DAFD91'
         ).configure_view(strokeOpacity=0)

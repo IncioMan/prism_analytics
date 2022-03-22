@@ -4,6 +4,7 @@ import json
 import requests
 import pandas as pd
 import datetime
+from multiprocessing.dummy import Pool as ThreadPool 
 
 
 def get_prices():
@@ -195,7 +196,7 @@ total_amps = total_boost_weight**2 / yluna_staked
 
 today = datetime.datetime.now().strftime("%Y%m%d")
 today_str = datetime.datetime.now().strftime("%Y-%m-%d")
-def get_amps_data(addr):
+def get_amps_data(user_address):
     # user queries
     try:
         user_xprism, user_amps, \
@@ -203,7 +204,7 @@ def get_amps_data(addr):
         user_yluna, user_weight, active_boost, pending_reward = get_user_prism_farm(user_address)
     except Exception as e:
         print(e)
-        print(f'Error obtaining data for {addr}')
+        print(f'Error obtaining data for {user_address}')
         return None
     current_position_size = (user_yluna * yluna_price) + (user_xprism * xprism_price)
 
@@ -215,7 +216,7 @@ def get_amps_data(addr):
     total_apr = base_apr + boost_apr
     current_daily_rewards = (base_rewards + boost_rewards) * prism_price / 365
 
-    return (today_str, addr, user_xprism, user_amps, user_yluna, user_weight, base_apr, 
+    return (today_str, user_address, user_xprism, user_amps, user_yluna, user_weight, base_apr, 
     boost_apr, total_apr, current_daily_rewards, current_position_size, yluna_price, prism_price,
     yluna_staked, total_boost_weight, boost_accrual_start_time, boost_accrual_last_updated,
     active_boost, pending_reward)
@@ -228,19 +229,25 @@ cols = ['date', 'addr', 'user_xprism', 'user_amps', 'user_yluna', 'user_weight',
 i = 1
 data = []
 print(len(df_claim))
+pool = ThreadPool(4)  # Make the Pool of workers
+addresses = []
 for _, user_address in df_claim['USER_ADDR'].iteritems():
-    if(i<2199):
+    if(i<3000):
         i+=1
         continue
-    addr_data = get_amps_data(user_address)
-    if(addr_data):
-        data.append(addr_data)
-    if(i%200==0):
+    addresses.append(user_address) 
+    if(i%20==0):
+        pool = ThreadPool(4)  # Make the Pool of workers
+        print(f"{str(datetime.datetime.now()).split('.')[0]} - Processing {len(addresses)} addresses", flush=True)
+        results = pool.map(get_amps_data, addresses) #Open the urls in their own threads
+        data = [*data,*results]
+        pool.close() #close the pool and wait for the work to finish 
+        pool.join()
+        addresses = []
+    if(i%100==0):
         print(f"{str(datetime.datetime.now()).split('.')[0]} - Processed {i} out of {len(df_claim)}", flush=True)
         df = pd.DataFrame(data, columns=cols)
         df.to_csv(f'data/amps_{today}.csv')
     i+=1
 df = pd.DataFrame(data, columns=cols)
 df.to_csv(f'data/amps_{today}.csv')
-        
-

@@ -118,7 +118,6 @@ class AMPSChart:
         df2 = df.copy()
         df2['current_daily_rewards'] = df2['current_daily_rewards'].apply(lambda x: 1 if int(x/10)*10 == 0 else int(x/10)*10)
         df2['current_daily_rewards'] = df2.current_daily_rewards.apply(self.current_daily_rewards_cat)
-        #print(df2.current_daily_rewards.value_counts())
         df2['n_addr'] = df2['addr']
         df2 = df2.groupby('current_daily_rewards').n_addr.count().reset_index()
         df2 = df2.rename(columns=cols_dict)
@@ -168,7 +167,6 @@ class AMPSChart:
     def xprisms_days_pledged(self,df):
         cols_dict = self.cols_dict
         df2 = df.groupby('boost_accrual_start_time_days_int').user_xprism.sum().reset_index()
-        print(df2)
         df2 = df2.rename(columns=cols_dict)
         chart = alt.Chart(df2).mark_bar().encode(
             x=alt.X(cols_dict['boost_accrual_start_time_days_int']+':N', \

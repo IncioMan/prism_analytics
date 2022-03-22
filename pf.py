@@ -225,7 +225,7 @@ st.text("")
 
 col0,col1, col2 = st.columns([0.1,1,2])
 with col1:
-    st.subheader('PRISM Farm Emission')
+    st.subheader('User Pledging')
     st.markdown("""The 130m $PRISM tokens have been split into 2 pools, the Base Pool and the AMPS Boosted Pool. Initially 80% of the tokens will be allocated to the Base Pool and 20% of the tokens will be allocated to the AMPS Boosted Pool.""")
     st.markdown("""What percentage has already been allocated? And how close are we to the unlock of the vested PRISM?""")
 with col2:
@@ -239,7 +239,7 @@ st.text("")
 
 col0,col1, col2 = st.columns([0.1,1,2])
 with col1:
-    st.subheader('PRISM Farm Emission')
+    st.subheader('Boost APR')
     st.markdown("""The 130m $PRISM tokens have been split into 2 pools, the Base Pool and the AMPS Boosted Pool. Initially 80% of the tokens will be allocated to the Base Pool and 20% of the tokens will be allocated to the AMPS Boosted Pool.""")
     st.markdown("""What percentage has already been allocated? And how close are we to the unlock of the vested PRISM?""")
 with col2:
@@ -253,7 +253,7 @@ st.text("")
 
 col0,col1, col2 = st.columns([0.1,1,2])
 with col1:
-    st.subheader('PRISM Farm Emission')
+    st.subheader('Time Pledged')
     st.markdown("""The 130m $PRISM tokens have been split into 2 pools, the Base Pool and the AMPS Boosted Pool. Initially 80% of the tokens will be allocated to the Base Pool and 20% of the tokens will be allocated to the AMPS Boosted Pool.""")
     st.markdown("""What percentage has already been allocated? And how close are we to the unlock of the vested PRISM?""")
 with col2:
@@ -267,7 +267,7 @@ st.text("")
 
 col0,col1, col2 = st.columns([0.1,1,2])
 with col1:
-    st.subheader('PRISM Farm Emission')
+    st.subheader('Daily Rewards')
     st.markdown("""The 130m $PRISM tokens have been split into 2 pools, the Base Pool and the AMPS Boosted Pool. Initially 80% of the tokens will be allocated to the Base Pool and 20% of the tokens will be allocated to the AMPS Boosted Pool.""")
     st.markdown("""What percentage has already been allocated? And how close are we to the unlock of the vested PRISM?""")
 with col2:
@@ -281,7 +281,7 @@ st.text("")
 
 col0,col1, col2 = st.columns([0.1,1,2])
 with col1:
-    st.subheader('PRISM Farm Emission')
+    st.subheader('Amount xPRISM Pledged')
     st.markdown("""The 130m $PRISM tokens have been split into 2 pools, the Base Pool and the AMPS Boosted Pool. Initially 80% of the tokens will be allocated to the Base Pool and 20% of the tokens will be allocated to the AMPS Boosted Pool.""")
     st.markdown("""What percentage has already been allocated? And how close are we to the unlock of the vested PRISM?""")
 with col2:

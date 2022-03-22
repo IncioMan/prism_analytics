@@ -226,8 +226,10 @@ st.text("")
 col0,col1, col2 = st.columns([0.1,1,2])
 with col1:
     st.subheader('User Pledging')
-    st.markdown("""The 130m $PRISM tokens have been split into 2 pools, the Base Pool and the AMPS Boosted Pool. Initially 80% of the tokens will be allocated to the Base Pool and 20% of the tokens will be allocated to the AMPS Boosted Pool.""")
-    st.markdown("""What percentage has already been allocated? And how close are we to the unlock of the vested PRISM?""")
+    st.markdown("""Prism Farm rewards users which pledge their xPRISM and stake yLUNA. By pledging
+    xPRISM users earn AMPs, a non-tradable token. AMPs accumulate as long as the user keeps its 
+    xPRISM pledged and resets as soon as she unpledges.""")
+    st.markdown("""What users have pledge the most xPRISM? How long have they been pledging for? Have they also staked many yLUNA?""")
 with col2:
     st.altair_chart(amps_cp.time_xprism_yluna(amps).properties(height=350), use_container_width=True)
 st.text("")
@@ -240,8 +242,13 @@ st.text("")
 col0,col1, col2 = st.columns([0.1,1,2])
 with col1:
     st.subheader('Time Pledged')
-    st.markdown("""The 130m $PRISM tokens have been split into 2 pools, the Base Pool and the AMPS Boosted Pool. Initially 80% of the tokens will be allocated to the Base Pool and 20% of the tokens will be allocated to the AMPS Boosted Pool.""")
-    st.markdown("""What percentage has already been allocated? And how close are we to the unlock of the vested PRISM?""")
+    st.markdown("""
+        AMPS create an incentive for users to keep their xPRISM pledged,
+        since unpledging causes the amount of AMPS accumulated to reset. In this chart
+        we look at the distribution of the number of users according to the amount of days 
+        they have been pledging for. 
+    """)
+    st.markdown("""Have most users been pledging since day one? Can we observe many users who have just (re)pledged?""")
 with col2:
     st.altair_chart(amps_cp.users_days_pledged(amps).properties(height=350), use_container_width=True)
 st.text("")
@@ -254,8 +261,12 @@ st.text("")
 col1,col2, col0 = st.columns([2,1,0.1])
 with col2:
     st.subheader('Boost APR')
-    st.markdown("""The 130m $PRISM tokens have been split into 2 pools, the Base Pool and the AMPS Boosted Pool. Initially 80% of the tokens will be allocated to the Base Pool and 20% of the tokens will be allocated to the AMPS Boosted Pool.""")
-    st.markdown("""What percentage has already been allocated? And how close are we to the unlock of the vested PRISM?""")
+    st.markdown("""
+    AMPS allow to obtain a share of the 26M PRISMs allocated for these boosted rewards.
+    The Boost APR is user specific as it depends on the amount of AMPS accumulated and yLUNA staked in the Prism Farm.
+    Let's take a look at what Boosted APR do users get. 
+    """)
+    st.markdown("""What is the most common APR percentage? What is the higher Boost APR recorded?""")
 with col1:
     st.altair_chart(amps_cp.users_boost_apr(amps).properties(height=350), use_container_width=True)
 st.text("")
@@ -269,8 +280,12 @@ st.text("")
 col1,col2, col0 = st.columns([2,1,0.1])
 with col2:
     st.subheader('Daily Rewards')
-    st.markdown("""The 130m $PRISM tokens have been split into 2 pools, the Base Pool and the AMPS Boosted Pool. Initially 80% of the tokens will be allocated to the Base Pool and 20% of the tokens will be allocated to the AMPS Boosted Pool.""")
-    st.markdown("""What percentage has already been allocated? And how close are we to the unlock of the vested PRISM?""")
+    st.markdown("""APR can be misleading, since it is expressed in comparison to the amount of value staked
+    Let's now look at the actual amount of tokens users receive daily as result of their base + boost rewards. 
+    """)
+    st.markdown("""
+        How many PRISM do users obtain daily? What is the highest amount recorded?
+    """)
 with col1:
     st.altair_chart(amps_cp.users_daily_rewards(amps).properties(height=350), use_container_width=True)
 st.text("")
@@ -284,8 +299,15 @@ st.text("")
 col0,col1, col2 = st.columns([0.1,1,2])
 with col1:
     st.subheader('Amount xPRISM Pledged')
-    st.markdown("""The 130m $PRISM tokens have been split into 2 pools, the Base Pool and the AMPS Boosted Pool. Initially 80% of the tokens will be allocated to the Base Pool and 20% of the tokens will be allocated to the AMPS Boosted Pool.""")
-    st.markdown("""What percentage has already been allocated? And how close are we to the unlock of the vested PRISM?""")
+    st.markdown("""
+    Users who have pledged xPRISM for long time have also accumulated AMPS as a result of it.
+    If they were to unpledge their xPRISM, they would loose all their AMPs. This means that the longer users
+    have pledged for, the stronger it is the incentive to keep pledging. In a sense, xPRISM which have been pledge
+    for long time, are unlikely to be sold on the market in the near future.
+    """)
+    st.markdown("""
+    How many xPRISM have been pledged since day 1?
+    """)
 with col2:
     st.altair_chart(amps_cp.xprisms_days_pledged(amps).properties(height=350), use_container_width=True)
 st.text("")

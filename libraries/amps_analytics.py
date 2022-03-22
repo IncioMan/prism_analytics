@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[6]:
+# In[130]:
 
 
 import pandas as pd
@@ -16,7 +16,7 @@ pd.set_option("display.max_colwidth", 400)
 pd.set_option("display.max_rows", 400)
 
 
-# In[7]:
+# In[180]:
 
 
 class AMPSDataProvider:
@@ -46,13 +46,14 @@ class AMPSDataProvider:
         df = self.amps
         df = df[~df.addr.isna()]
         df['boost_accrual_start_date'] = pd.to_datetime(df['boost_accrual_start_time'], unit='s')
-        df['boost_accrual_start_time_days'] = (df['boost_accrual_start_time'] / 1000 / 3600 / 24)
-        df['boost_accrual_start_time_hours'] = df['boost_accrual_start_time'] / 1000 / 3600
+        df['boost_accrual_start_time_days'] = df['boost_accrual_start_date'].apply(lambda x: pd.Timestamp.today() - x)
+        df['boost_accrual_start_time_days'] = df['boost_accrual_start_time_days'].dt.days
+        df['boost_accrual_start_time_days'] = df['boost_accrual_start_time_days'].apply(lambda x: 0 if x >  400 else x)
         df['boost_accrual_start_time_days_int'] = df['boost_accrual_start_time_days'].fillna(0).apply(int)
         self.amps = df
 
 
-# In[126]:
+# In[181]:
 
 
 class AMPSChart:
@@ -118,6 +119,7 @@ class AMPSChart:
         df2 = df.copy()
         df2['current_daily_rewards'] = df2['current_daily_rewards'].apply(lambda x: 1 if int(x/10)*10 == 0 else int(x/10)*10)
         df2['current_daily_rewards'] = df2.current_daily_rewards.apply(self.current_daily_rewards_cat)
+        #print(df2.current_daily_rewards.value_counts())
         df2['n_addr'] = df2['addr']
         df2 = df2.groupby('current_daily_rewards').n_addr.count().reset_index()
         df2 = df2.rename(columns=cols_dict)

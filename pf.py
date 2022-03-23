@@ -294,7 +294,7 @@ st.text("")
 
 col0,col1, col2 = st.columns([0.1,1,2])
 with col1:
-    st.subheader('User Pledging')
+    st.subheader('Users Pledging')
     st.markdown("""Prism Farm rewards users which pledge their xPRISM and stake yLUNA. By pledging
     xPRISM users earn AMPs, a non-tradable token. AMPs accumulate as long as the user keeps its 
     xPRISM pledged and resets as soon as she unpledges.""")
@@ -333,7 +333,7 @@ st.text("")
 
 col1,col2, col0 = st.columns([2,1,0.1])
 with col2:
-    st.subheader('xPRISM pledged to AMPs')
+    st.subheader('xPRISM holdings pledged')
     st.markdown("""To align the Prism Farmers' incentives with the incentives of 
     long-term xPRISM holders, 
     Prism has  introduced the amplified yields, called AMPS.

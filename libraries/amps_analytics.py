@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[130]:
+# In[1]:
 
 
 import pandas as pd
@@ -16,13 +16,14 @@ pd.set_option("display.max_colwidth", 400)
 pd.set_option("display.max_rows", 400)
 
 
-# In[180]:
+# In[88]:
 
 
 class AMPSDataProvider:
     def __init__(self, path='../data/amps'):
         self.path = path
         self.amps = None
+        self.boost_apr_median = None
         pass
         
     def load(self):
@@ -41,6 +42,7 @@ class AMPSDataProvider:
                 print(f'File not found: {file_name}')
         df.columns = [c.lower() for c in df.columns]
         self.amps = df
+        self.boost_apr_median =  df[df.boost_apr>0].boost_apr.median()
         
     def parse(self):
         df = self.amps
@@ -50,17 +52,21 @@ class AMPSDataProvider:
         df['boost_accrual_start_time_days'] = df['boost_accrual_start_time_days'].dt.days
         df['boost_accrual_start_time_days'] = df['boost_accrual_start_time_days'].apply(lambda x: 0 if x >  400 else x)
         df['boost_accrual_start_time_days_int'] = df['boost_accrual_start_time_days'].fillna(0).apply(int)
+        df['user_yluna'] = df.user_yluna.apply(lambda x: round(x,2))
+        df['user_xprism'] = df.user_xprism.apply(lambda x: round(x,2))
         self.amps = df
+        
 
 
-# In[276]:
+# In[89]:
 
 
 class AMPSChart:
     
     def __init__(self):
         self.cols_dict = {
-            'user_xprism': 'Amount of xPRISM',
+            'user_xprism': 'Amount of xPRISM ',
+            'user_xprism_label': 'Amount of xPRISM',
             'boost_accrual_start_time_days_int': 'Number of days pledged for',
             'index': 'Number of users',
             'boost_accrual_start_time_days': 'Current number of days pledged for',
@@ -95,7 +101,7 @@ class AMPSChart:
             x=alt.X(cols_dict['boost_accrual_start_time_days']+":Q"),
             href='url:N',
             color=alt.Color(cols_dict['user_yluna'],
-                scale=alt.Scale(scheme='redpurple', domain=[0,df2[cols_dict['user_yluna']].max()/20]),
+                scale=alt.Scale(scheme='redpurple', domain=[0,df2[cols_dict['user_yluna']].max()/5]),
                 legend=alt.Legend(
                             orient='top-left',
                             padding=0,
@@ -171,12 +177,13 @@ class AMPSChart:
         cols_dict = self.cols_dict
         df2 = df.groupby('boost_accrual_start_time_days_int').user_xprism.sum().reset_index()
         df2 = df2.rename(columns=cols_dict)
+        df2[cols_dict['user_xprism_label']] = df2[cols_dict['user_xprism']].apply(lambda x: str(round(x/1000000,2))+'M')
         chart = alt.Chart(df2).mark_bar().encode(
             x=alt.X(cols_dict['boost_accrual_start_time_days_int']+':N', \
                     scale=alt.Scale(domain=list(range(df2[cols_dict['boost_accrual_start_time_days_int']].max()+1))),\
                     axis=alt.Axis(tickCount=10, labelAngle=0, tickBand = 'center')),
             y=cols_dict['user_xprism']+':Q',
-            tooltip=[cols_dict['boost_accrual_start_time_days_int'],cols_dict['user_xprism']+':Q']
+            tooltip=[cols_dict['boost_accrual_start_time_days_int'],cols_dict['user_xprism_label']+':N']
         ).configure_mark(
             color='#ccf4ed'
         ).configure_view(strokeOpacity=0)

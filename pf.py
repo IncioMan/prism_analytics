@@ -163,7 +163,7 @@ with col3:
     st.text("")
     days_left = 365-(datetime.date.today() - datetime.date(2022, 3, 5)).days
     st.metric(label="Boost Median APR", value=f"{round(boost_apr_median,2)}%")
-    st.metric(label="Prism Farm Participants", value=f"{farm_users}")
+    st.metric(label="Prism Farm Participants", value=f"{int(farm_users)}")
     st.metric(label="Prisms emitted so far", value=f"{up_to_today_emission}%")
 
 st.text("")

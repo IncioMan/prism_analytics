@@ -1,4 +1,3 @@
-import imp
 import streamlit as st
 import pandas as pd
 import altair as alt
@@ -11,6 +10,8 @@ from libraries.xPrismAmps_from_urls import xPrismAmpsChart, xPrismAMPsDP
 from libraries.aprs_over_time import APRSChart, APRDataProvider
 from libraries.amps_analytics import AMPSChart, AMPSDataProvider
 
+ydp = DataProvider('yLuna')
+pdp = DataProvider('pLuna')
 
 st.set_page_config(page_title="Prism Farm - Analytics",\
         page_icon=Image.open(requests.get('https://raw.githubusercontent.com/IncioMan/prism_forge/master/images/xPRISM.png',stream=True).raw),\
@@ -31,96 +32,46 @@ def get_url(url):
     return pd.read_csv(url, index_col=0)
     
 cp = ChartProvider()
-ystake_dp = YLunaStakingDataProvider(claim,get_url,'./data')
-refract_dp = RefractDataProvider(claim,get_url,'./data')
-swaps_dp = SwapsDataProvider(claim,get_url,'./data')
-lp_dp = LPDataProvider(claim,get_url,'./data')
-collector_dp = CollectorDataProvider(claim,get_url,'./data')
-xprism_amps_dp = xPrismAMPsDP(claim)
-aprs_dp = APRDataProvider(claim)
-amps_dp = AMPSDataProvider('./data/amps')
-ydp = DataProvider('yLuna')
-pdp = DataProvider('pLuna')
-pe_dp = PrismEmittedDataProvider()
 pe_cp = PrismEmittedChartProvider()
 amps_cp = AMPSChart()
 
 @st.cache(ttl=30000, show_spinner=False, allow_output_mutation=True)
-def get_data(pe_dp, ystake_dp, refract_dp, swaps_dp, lp_dp, collector_dp, 
-            ydp, pdp, xprism_amps_dp, aprs_dp, to_csv=False):
-    print("{} - Loading data: ystake_dp...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
-    ystake_dp.load()
-    print("{} - Loading data: refract_dp...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
-    refract_dp.load()
-    print("{} - Loading data: swaps_dp...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
-    swaps_dp.load()
-    print("{} - Loading data: lp_dp...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
-    lp_dp.load()
-    print("{} - Loading data: collector_dp...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
-    collector_dp.load()
-    print("{} - Loading data: xprism_amps_dp...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
-    xprism_amps_dp.load()
-    print("{} - Loading data: aprs_dp...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
-    aprs_dp.load()
-    print("{} - Loading data: amps_dp...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
-    amps_dp.load()
-    print("{} - Data Loaded...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
+def get_data():
+    print("{} - Loading data...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
+    pe_dp_prism_emitted = pd.read_csv('./data/processed/prism_emitted.csv', index_col=0)
+    pe_dp_prism_emitted_so_far = pd.read_csv('./data/processed/prism_emitted_so_far.csv', index_col=0)
+    pe_dp_dates_to_mark = pd.read_csv('./data/processed/pe_dp_dates_to_mark.csv', index_col=0)
+    pe_dp_extra_dates_to_mark = pd.read_csv('./data/processed/extra_dates_to_mark.csv', index_col=0)
+    pdp_dates_to_mark = pd.read_csv('./data/processed/pdp_dates_to_mark.csv', index_col=0)
+    pdp_asset_used = pd.read_csv('./data/processed/pdp_asset_used.csv', index_col=0)
+    pdp_asset_unused = pd.read_csv('./data/processed/pdp_asset_unused.csv', index_col=0)
+    ydp_dates_to_mark = pd.read_csv('./data/processed/ydp_dates_to_mark.csv', index_col=0)
+    ydp_asset_used = pd.read_csv('./data/processed/ydp_asset_used.csv', index_col=0)
+    ydp_asset_unused = pd.read_csv('./data/processed/ydp_asset_unused.csv', index_col=0)
+    refract_dp_all_refreact = pd.read_csv('./data/processed/all_refreact.csv', index_col=0)
+    xprism_amps_dp_perc_amps_n_user = pd.read_csv('./data/processed/perc_amps_n_user.csv', index_col=0)
+    aprs_dp_aprs = pd.read_csv('./data/processed/aprs.csv') 
+    amps_dp_amps = pd.read_csv('./data/processed/amps.csv')
+    single_metrics = pd.read_csv('./data/processed/single_metrics.csv', index_col=0)
+    farm_users = single_metrics.loc['farm_participants'].values[0]
+    last_yluna_farm = single_metrics.loc['last_yluna_farm'].values[0]
+    last_farm_apr = single_metrics.loc['last_farm_apr'].values[0]
+    boost_apr_median = single_metrics.loc['boost_apr_median'].values[0]
+    up_to_today_emission = single_metrics.loc['up_to_today_emission'].values[0]
+    print("{} - Data loaded".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
+
+    return pe_dp_prism_emitted, pe_dp_prism_emitted_so_far, pe_dp_dates_to_mark, pe_dp_extra_dates_to_mark,\
+    pdp_dates_to_mark, pdp_asset_used, pdp_asset_unused, ydp_dates_to_mark,\
+    ydp_asset_used, ydp_asset_unused, refract_dp_all_refreact, xprism_amps_dp_perc_amps_n_user,\
+    aprs_dp_aprs, last_farm_apr, last_yluna_farm, up_to_today_emission, amps_dp_amps,\
+            boost_apr_median, farm_users
     
 
-    if(to_csv):    
-        ystake_dp.write_to_csv()
-        refract_dp.write_to_csv()
-        swaps_dp.write_to_csv()
-        lp_dp.write_to_csv()
-        collector_dp.write_to_csv()
-    
-    print("{} - Parsing data...".format(str(datetime.datetime.now()).split('.')[0]), flush=True) 
-    ystake_dp.parse()
-    refract_dp.parse()
-    swaps_dp.parse()
-    lp_dp.parse()
-    collector_dp.parse(lp_dp.withdraw_, lp_dp.provide_, swaps_dp.swaps_df_all)
-    xprism_amps_dp.parse()
-    aprs_dp.parse(ystake_dp.ystaking_farm_df)
-    amps_dp.parse()
-    print("{} - Data parsed...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
-
-    ydp.lp_delta(lp_dp.withdraw_[lp_dp.withdraw_.asset=='yLuna'],
-            lp_dp.provide_[lp_dp.provide_.asset=='yLuna'], 
-            swaps_dp.yluna_swaps, collector_dp.collector_pyluna[collector_dp.collector_pyluna.asset=='yLuna'])
-    ydp.stk_delta(ystake_dp.ystaking_df)
-    ydp.stk_farm_delta(ystake_dp.ystaking_farm_df)
-    ydp.refact_delta(refract_dp.all_refreact)
-    ydp.all_delta()
-    ydp.all_deltas = ydp.fill_date_gaps(ydp.all_deltas)
-    ydp.unused_asset(ydp.all_deltas)
-
-    pdp.lp_delta(lp_dp.withdraw_[lp_dp.withdraw_.asset=='pLuna'],
-            lp_dp.provide_[lp_dp.provide_.asset=='pLuna'], 
-            swaps_dp.yluna_swaps, collector_dp.collector_pyluna[collector_dp.collector_pyluna.asset=='pLuna'])
-    pdp.refact_delta(refract_dp.all_refreact)
-    pdp.all_delta()
-    pdp.all_deltas = pdp.fill_date_gaps(pdp.all_deltas)
-    pdp.unused_asset(pdp.all_deltas)
-
-    last_farm_apr = aprs_dp.last_yluna_farm
-    df = ydp.daily_delta_stk_farm
-    last_yluna_farm= round(df[(df.Time==df.Time.max())\
-            &(df['Type']=='yLuna Farm staked')]\
-            ['Amount'].values[0]/1000000,2)
-    return pe_dp.prism_emitted, pe_dp.prism_emitted_so_far, pe_dp.dates_to_mark,\
-           pdp.dates_to_mark, pdp.asset_used, pdp.asset_unused, ydp.dates_to_mark,\
-           ydp.asset_used, ydp.asset_unused, refract_dp.all_refreact, xprism_amps_dp.perc_amps_n_user,\
-           aprs_dp.aprs, last_farm_apr, last_yluna_farm, pe_dp.up_to_today_emission, amps_dp.amps,\
-               amps_dp.boost_apr_median, ystake_dp.ystaking_farm_df.sender.nunique()
-
-pe_dp_prism_emitted, pe_dp_prism_emitted_so_far, pe_dp_dates_to_mark,\
+pe_dp_prism_emitted, pe_dp_prism_emitted_so_far, pe_dp_dates_to_mark, pe_dp_extra_dates_to_mark,\
 pdp_dates_to_mark, pdp_asset_used, pdp_asset_unused, ydp_dates_to_mark,\
 ydp_asset_used, ydp_asset_unused, all_refracts, perc_amps_n_user, aprs,\
     last_farm_apr, last_yluna_farm, up_to_today_emission, amps,\
-        boost_apr_median, farm_users = get_data(pe_dp, ystake_dp, refract_dp, 
-                                            swaps_dp, lp_dp, collector_dp, ydp, pdp, 
-                                            xprism_amps_dp, aprs_dp, amps_dp)
+        boost_apr_median, farm_users = get_data()
 
 ###
 ###
@@ -173,8 +124,8 @@ c3 = alt.Chart(pdp_dates_to_mark).mark_text(
 pluna_chart = (c1 + c2 + c3).properties(height=350).configure_view(strokeOpacity=0)
 perc_amps_chart = xPrismAmpsChart.chart(perc_amps_n_user)
 aprs_chart = APRSChart.chart(aprs)
-prism_emitted_chart = pe_cp.prism_emitted_chart(pe_dp.prism_emitted, pe_dp.prism_emitted_so_far, 
-                       pe_dp.dates_to_mark, pe_dp.extra_dates_to_mark, '2022-05-25')
+prism_emitted_chart = pe_cp.prism_emitted_chart(pe_dp_prism_emitted, pe_dp_prism_emitted_so_far, 
+                       pe_dp_dates_to_mark, pe_dp_extra_dates_to_mark, '2022-05-25')
 
 st.markdown(f"""
 <div style=\"width: 100%; text-align: center\">

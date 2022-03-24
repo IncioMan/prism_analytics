@@ -20,7 +20,7 @@ pd.set_option("display.max_rows", 400)
 
 
 class AMPSDataProvider:
-    def __init__(self, path='../data/amps_{}.csv'):
+    def __init__(self, path='../data/amps'):
         self.path = path
         self.amps = None
         self.boost_apr_median = None
@@ -33,7 +33,7 @@ class AMPSDataProvider:
             date = today-datetime.timedelta(days=int(i))
             date = date.strftime("%Y%m%d")
             #https://raw.githubusercontent.com/IncioMan/prism_analytics/main/data/amps_20220322.csv
-            file_name = self.path.format(date)
+            file_name = f'{self.path}/amps_{date}.csv'
             try:
                 df = pd.read_csv(file_name).drop(columns=['Unnamed: 0'])
                 print(f'File found: {file_name}')

@@ -205,6 +205,9 @@ def get_amps_data(user_address):
     except Exception as e:
         print(e)
         print(f'Error obtaining data for {user_address}')
+        today = datetime.datetime.now().strftime("%Y%m%d")
+        with open(f"data/amps/errors_{today}.txt", "a") as errorfile:
+            errorfile.write(user_address + "\n")
         return None
     current_position_size = (user_yluna * yluna_price) + (user_xprism * xprism_price)
 
@@ -233,7 +236,7 @@ pool = ThreadPool(4)  # Make the Pool of workers
 addresses = []
 for _, user_address in df_claim['USER_ADDR'].iteritems():
     addresses.append(user_address) 
-    if(i%20==0):
+    if(i%100==0):
         pool = ThreadPool(4)  # Make the Pool of workers
         print(f"{str(datetime.datetime.now()).split('.')[0]} - Processing {len(addresses)} addresses", flush=True)
         results = pool.map(get_amps_data, addresses) #Open the urls in their own threads
@@ -241,7 +244,7 @@ for _, user_address in df_claim['USER_ADDR'].iteritems():
         pool.close() #close the pool and wait for the work to finish 
         pool.join()
         addresses = []
-    if(i%100==0):
+    if(i%1000==0):
         print(f"{str(datetime.datetime.now()).split('.')[0]} - Processed {i} out of {len(df_claim)}", flush=True)
         df = pd.DataFrame(data, columns=cols)
         df.to_csv(f'data/amps/amps_{today}.csv')

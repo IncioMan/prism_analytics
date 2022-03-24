@@ -213,9 +213,15 @@ def get_amps_data(user_address):
 
     # intial rewards
     base_rewards = 104_000_000 * user_yluna / yluna_staked
-    base_apr = (base_rewards * prism_price) / (user_yluna * yluna_price) * 100
+    if(user_yluna == 0 or yluna_price==0):
+        base_apr = 0
+    else:
+        base_apr = (base_rewards * prism_price) / (user_yluna * yluna_price) * 100
     boost_rewards = 26_000_000 * user_weight / total_boost_weight
-    boost_apr = (boost_rewards * prism_price) / (user_yluna * yluna_price) * 100
+    if(user_yluna == 0 or yluna_price==0):
+        boost_apr = 0
+    else:
+        boost_apr = (boost_rewards * prism_price) / (user_yluna * yluna_price) * 100
     total_apr = base_apr + boost_apr
     current_daily_rewards = (base_rewards + boost_rewards) * prism_price / 365
 
@@ -234,7 +240,14 @@ data = []
 print(len(df_claim))
 pool = ThreadPool(4)  # Make the Pool of workers
 addresses = []
+offset = 0
+max_lines = 10000
 for _, user_address in df_claim['USER_ADDR'].iteritems():
+    if(i<=offset):
+        i+=1
+        continue
+    if(i>max_lines):
+        break
     addresses.append(user_address) 
     if(i%100==0):
         pool = ThreadPool(4)  # Make the Pool of workers

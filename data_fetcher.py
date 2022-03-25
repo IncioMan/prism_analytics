@@ -15,6 +15,7 @@ def claim(claim_hash, cols_claim=[]):
         f"https://api.flipsidecrypto.com/api/v2/queries/{claim_hash}/data/latest",
         convert_dates=["BLOCK_TIMESTAMP"],
     )
+    df_claim.columns = [c.lower() for c in df_claim.columns]
     return df_claim
 
 def get_url(url):
@@ -28,7 +29,7 @@ lp_dp = LPDataProvider(claim,get_url,'./data')
 collector_dp = CollectorDataProvider(claim,get_url,'./data')
 xprism_amps_dp = xPrismAMPsDP(claim)
 aprs_dp = APRDataProvider(claim)
-amps_dp = AMPSDataProvider('https://raw.githubusercontent.com/IncioMan/prism_analytics/main/data/amps/amps_{}.csv')
+amps_dp = AMPSDataProvider(claim,'https://raw.githubusercontent.com/IncioMan/prism_analytics/main/data/amps/amps_{}.csv')
 ydp = DataProvider('yLuna')
 pdp = DataProvider('pLuna')
 pe_dp = PrismEmittedDataProvider()
@@ -102,6 +103,7 @@ refract_dp.all_refreact.to_csv('./data/processed/all_refreact.csv')
 xprism_amps_dp.perc_amps_n_user.to_csv('./data/processed/perc_amps_n_user.csv')
 aprs_dp.aprs.to_csv('./data/processed/aprs.csv') 
 amps_dp.amps.to_csv('./data/processed/amps.csv')
+amps_dp.amps_activity_df.to_csv('./data/processed/amps_activity.csv')
 
 pd.Series([ystake_dp.ystaking_farm_df.sender.nunique(),
             last_yluna_farm, last_farm_apr,

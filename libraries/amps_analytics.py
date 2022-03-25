@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[51]:
 
 
 import pandas as pd
@@ -16,14 +16,15 @@ pd.set_option("display.max_colwidth", 400)
 pd.set_option("display.max_rows", 400)
 
 
-# In[88]:
+# In[52]:
 
 
 class AMPSDataProvider:
-    def __init__(self, path='../data/amps_{}.csv'):
+    def __init__(self, claim, path='../data/amps'):
         self.path = path
+        self.claim = claim
         self.amps = None
-        self.boost_apr_median = None
+        self.amps_activity = '384e262c-a7ff-4adb-b8b7-8e6661f85f86'
         pass
         
     def load(self):
@@ -42,9 +43,11 @@ class AMPSDataProvider:
                 print(f'File not found: {file_name}')
         df.columns = [c.lower() for c in df.columns]
         self.amps = df
+        self.amps_activity_df = self.claim(self.amps_activity)
         self.boost_apr_median =  df[df.boost_apr>0].boost_apr.median()
         
     def parse(self):
+        self.amps_activity_df['day'] = self.amps_activity_df.day.str[:-13]
         df = self.amps
         df = df[~df.addr.isna()]
         df['boost_accrual_start_date'] = pd.to_datetime(df['boost_accrual_start_time'], unit='s')
@@ -58,7 +61,7 @@ class AMPSDataProvider:
         
 
 
-# In[89]:
+# In[53]:
 
 
 class AMPSChart:
@@ -188,3 +191,41 @@ class AMPSChart:
             color='#ccf4ed'
         ).configure_view(strokeOpacity=0)
         return chart.properties(width=600)
+    
+    def pledge_unpledge_daily(self,amps_activity_df):
+        pl = amps_activity_df[['day','pledge_amount']]
+        pl.columns = ['Day','Amount of xPRISM']
+        pl['Action'] = 'Pledge'
+        unpl = amps_activity_df[['day','unpledge_amount']]
+        unpl.columns = ['Day','Amount of xPRISM']
+        unpl['Amount of xPRISM'] = -unpl['Amount of xPRISM']
+        unpl['Action'] = 'Unpledge'
+        df = pl.append(unpl)
+        return alt.Chart(df).mark_line(point=True).encode(
+             x=alt.X('Day:T', sort=alt.EncodingSortField(order='ascending')),
+             y=alt.Y("Amount of xPRISM:Q",scale=alt.Scale(domain=[-3000000,18000000])),
+            color=alt.Color('Action:N', 
+                            scale=alt.Scale(scheme='set2'),
+                            legend=alt.Legend(
+                                    orient='top-left',
+                                    padding=5,
+                                    legendY=0,
+                                    direction='vertical')),
+            tooltip=[alt.Tooltip('Day:T', format='%Y-%m-%d'), 'Action', 'Amount of xPRISM']
+        ).properties(width=700).configure_axisX(
+            labelAngle=0
+        ).configure_view(strokeOpacity=0)
+        
+    def number_users_pledging(self,amps_activity_df):
+        df = amps_activity_df[['day','n_users']]
+        cols = ['Day','Number of users pledging/unpledging xPRISM']
+        df.columns = cols
+        return alt.Chart(df).mark_bar().encode(
+             x=alt.X('Day:T', sort=alt.EncodingSortField(order='ascending')),
+             y=cols[1]+":Q",
+             tooltip=[alt.Tooltip('Day:T', format='%Y-%m-%d'), cols[1]]
+        ).configure_mark(
+            color='#DAFD91'
+        ).properties(width=700).configure_axisX(
+            labelAngle=0
+        ).configure_view(strokeOpacity=0)

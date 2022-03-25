@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[51]:
+# In[69]:
 
 
 import pandas as pd
@@ -16,7 +16,7 @@ pd.set_option("display.max_colwidth", 400)
 pd.set_option("display.max_rows", 400)
 
 
-# In[52]:
+# In[70]:
 
 
 class AMPSDataProvider:
@@ -61,7 +61,7 @@ class AMPSDataProvider:
         
 
 
-# In[53]:
+# In[71]:
 
 
 class AMPSChart:
@@ -104,7 +104,7 @@ class AMPSChart:
             x=alt.X(cols_dict['boost_accrual_start_time_days']+":Q"),
             href='url:N',
             color=alt.Color(cols_dict['user_yluna'],
-                scale=alt.Scale(scheme='redpurple', domain=[0,df2[cols_dict['user_yluna']].max()/5]),
+                scale=alt.Scale(scheme='lightgreyteal', domain=[0,df2[cols_dict['user_yluna']].max()/5]),
                 legend=alt.Legend(
                             orient='top-left',
                             padding=0,
@@ -157,7 +157,7 @@ class AMPSChart:
             y=cols_dict['n_addr']+':Q',
             tooltip=[cols_dict['boost_apr'],cols_dict['n_addr']+':Q']
         ).configure_mark(
-            color='#ccf4ed'
+            color='#DAFD91'
         ).configure_view(strokeOpacity=0)
         return chart.properties(width=600)
     
@@ -172,7 +172,7 @@ class AMPSChart:
             y='Number of users'+":Q",
             tooltip=['Current number of days pledged for','Number of users'+":Q"]
         ).configure_mark(
-            color='#DAFD91'
+            color='#ccf4ed'
         ).configure_view(strokeOpacity=0)
         return chart.properties(width=600)
     
@@ -188,7 +188,7 @@ class AMPSChart:
             y=cols_dict['user_xprism']+':Q',
             tooltip=[cols_dict['boost_accrual_start_time_days_int'],cols_dict['user_xprism_label']+':N']
         ).configure_mark(
-            color='#ccf4ed'
+            color='#DAFD91'
         ).configure_view(strokeOpacity=0)
         return chart.properties(width=600)
     
@@ -201,31 +201,32 @@ class AMPSChart:
         unpl['Amount of xPRISM'] = -unpl['Amount of xPRISM']
         unpl['Action'] = 'Unpledge'
         df = pl.append(unpl)
+        df['Amount of xPRISM (M)'] = df['Amount of xPRISM'].apply(lambda x: str(round(x/1000000,2))+"M")
         return alt.Chart(df).mark_line(point=True).encode(
              x=alt.X('Day:T', sort=alt.EncodingSortField(order='ascending')),
              y=alt.Y("Amount of xPRISM:Q",scale=alt.Scale(domain=[-3000000,18000000])),
-            color=alt.Color('Action:N', 
-                            scale=alt.Scale(scheme='set2'),
-                            legend=alt.Legend(
-                                    orient='top-left',
-                                    padding=5,
-                                    legendY=0,
-                                    direction='vertical')),
-            tooltip=[alt.Tooltip('Day:T', format='%Y-%m-%d'), 'Action', 'Amount of xPRISM']
+            color=alt.Color('Action:N', scale=alt.Scale(domain=['Unpledge','Pledge'], range=['#c7208c','#fbb7bd'])),
+            tooltip=[alt.Tooltip('Day:T', format='%Y-%m-%d'), 'Action', 'Amount of xPRISM (M)']
         ).properties(width=700).configure_axisX(
             labelAngle=0
         ).configure_view(strokeOpacity=0)
         
     def number_users_pledging(self,amps_activity_df):
-        df = amps_activity_df[['day','n_users']]
-        cols = ['Day','Number of users pledging/unpledging xPRISM']
-        df.columns = cols
+        pl = amps_activity_df[['day','n_bonding_users']]
+        pl.columns = ['Day','Number of users']
+        pl['Action'] = 'Pledge'
+        unpl = amps_activity_df[['day','n_unbonding_users']]
+        unpl.columns = ['Day','Number of users']
+        unpl['Action'] = 'Unpledge'
+        df = pl.append(unpl)
         return alt.Chart(df).mark_bar().encode(
              x=alt.X('Day:T', sort=alt.EncodingSortField(order='ascending')),
-             y=cols[1]+":Q",
-             tooltip=[alt.Tooltip('Day:T', format='%Y-%m-%d'), cols[1]]
+             y=alt.Y("Number of users:Q"),
+            color=alt.Color('Action:N', scale=alt.Scale(domain=['Unpledge','Pledge'], range=['#c7208c','#fbb7bd'])),
+           tooltip=[alt.Tooltip('Day:T', format='%Y-%m-%d'), 'Action', 'Number of users']
         ).configure_mark(
             color='#DAFD91'
         ).properties(width=700).configure_axisX(
             labelAngle=0
         ).configure_view(strokeOpacity=0)
+

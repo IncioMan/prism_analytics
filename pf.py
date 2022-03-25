@@ -53,6 +53,7 @@ def get_data():
     xprism_amps_dp_perc_amps_n_user = pd.read_csv(url.format('perc_amps_n_user'), index_col=0)
     aprs_dp_aprs = pd.read_csv(url.format('aprs'), index_col=0)
     amps_dp_amps = pd.read_csv(url.format('amps'), index_col=0)
+    amps_activity = pd.read_csv(url.format('amps_activity'), index_col=0)
     single_metrics = pd.read_csv(url.format('single_metrics'), index_col=0)
     farm_users = single_metrics.loc['farm_participants'].values[0]
     last_yluna_farm = single_metrics.loc['last_yluna_farm'].values[0]
@@ -65,14 +66,14 @@ def get_data():
     pdp_dates_to_mark, pdp_asset_used, pdp_asset_unused, ydp_dates_to_mark,\
     ydp_asset_used, ydp_asset_unused, refract_dp_all_refreact, xprism_amps_dp_perc_amps_n_user,\
     aprs_dp_aprs, last_farm_apr, last_yluna_farm, up_to_today_emission, amps_dp_amps,\
-            boost_apr_median, farm_users
+            boost_apr_median, farm_users, amps_activity
     
 
 pe_dp_prism_emitted, pe_dp_prism_emitted_so_far, pe_dp_dates_to_mark, pe_dp_extra_dates_to_mark,\
 pdp_dates_to_mark, pdp_asset_used, pdp_asset_unused, ydp_dates_to_mark,\
 ydp_asset_used, ydp_asset_unused, all_refracts, perc_amps_n_user, aprs,\
     last_farm_apr, last_yluna_farm, up_to_today_emission, amps,\
-        boost_apr_median, farm_users = get_data()
+        boost_apr_median, farm_users, amps_activity = get_data()
 
 ###
 ###
@@ -227,16 +228,13 @@ st.text("")
 
 col0,col1, col2 = st.columns([0.1,1,2])
 with col1:
-    st.subheader('Time Pledged')
-    st.markdown("""
-        AMPS create an incentive for users to keep their xPRISM pledged,
-        since unpledging causes the amount of AMPS accumulated to reset. In this chart
-        we look at the distribution of the number of users according to the amount of days 
-        they have been pledging for. 
-    """)
-    st.markdown("""Have most users been pledging since day one? Can we observe many users who have just (re)pledged?""")
+    st.subheader('xPRISM Pledged Daily')
+    st.markdown("""Every day users might pledge or unpledge their xPRISM. 
+    This affects the overall amount of AMPs in circulation, as each unpledging resests AMPs and 
+    new xPRISM pledge is more value committed into the protocol""")
+    st.markdown("""Have we experienced days of high unpledging activity? And what about pledging, is it constant over time?""")
 with col2:
-    st.altair_chart(amps_cp.users_days_pledged(amps).properties(height=350), use_container_width=True)
+    st.altair_chart(amps_cp.pledge_unpledge_daily(amps_activity).properties(height=350), use_container_width=True)
 st.text("")
 st.text("")
 st.text("")
@@ -246,12 +244,29 @@ st.text("")
 
 col0,col1, col2 = st.columns([0.1,1,2])
 with col1:
+    st.subheader('Users (un)pledging Daily')
+    st.markdown("""Looking at the number of users performing pledging/unpledging operations might show some market sentiment.
+    Indeed, some external events might lead many users to pledge/unpledge their xPRISM.""")
+    st.markdown("""What are the days with most activity? What could be the cause for that?""")
+with col2:
+    st.altair_chart(amps_cp.number_users_pledging(amps_activity).properties(height=350), use_container_width=True)
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
+
+
+col1,col2, col0 = st.columns([2,1,0.1])
+with col2:
     st.subheader('Users Pledging')
     st.markdown("""Prism Farm rewards users which pledge their xPRISM and stake yLUNA. By pledging
     xPRISM users earn AMPs, a non-tradable token. AMPs accumulate as long as the user keeps its 
     xPRISM pledged and resets as soon as she unpledges.""")
     st.markdown("""What users have pledge the most xPRISM? How long have they been pledging for? Have they also staked many yLUNA?""")
-with col2:
+with col1:
     st.altair_chart(amps_cp.time_xprism_yluna(amps).properties(height=350), use_container_width=True)
 st.text("")
 st.text("")
@@ -260,9 +275,28 @@ st.text("")
 st.text("")
 st.text("")
 
-
 col1,col2, col0 = st.columns([2,1,0.1])
 with col2:
+    st.subheader('Time Pledged')
+    st.markdown("""
+        AMPS create an incentive for users to keep their xPRISM pledged,
+        since unpledging causes the amount of AMPS accumulated to reset. In this chart
+        we look at the distribution of the number of users according to the amount of days 
+        they have been pledging for. 
+    """)
+    st.markdown("""Have most users been pledging since day one? Can we observe many users who have just (re)pledged?""")
+with col1:
+    st.altair_chart(amps_cp.users_days_pledged(amps).properties(height=350), use_container_width=True)
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
+
+col0,col1, col2 = st.columns([0.1,1,2])
+with col1:
     st.subheader('Amount xPRISM Pledged')
     st.markdown("""
     Users who have pledged xPRISM for long time have also accumulated AMPS as a result of it.
@@ -273,7 +307,7 @@ with col2:
     st.markdown("""
     How many xPRISM have been pledged since day 1?
     """)
-with col1:
+with col2:
     st.altair_chart(amps_cp.xprisms_days_pledged(amps).properties(height=350), use_container_width=True)
 st.text("")
 st.text("")
@@ -283,8 +317,8 @@ st.text("")
 st.text("")
 
 
-col1,col2, col0 = st.columns([2,1,0.1])
-with col2:
+col0,col1, col2 = st.columns([0.1,1,2])
+with col1:
     st.subheader('xPRISM holdings pledged')
     st.markdown("""To align the Prism Farmers' incentives with the incentives of 
     long-term xPRISM holders, 
@@ -295,7 +329,7 @@ Committing more xPRISM tokens and over a longer period of time
 will earn more AMPS and consequently earn even higher yields in PRISM 
 Farm.""")
     st.markdown("""How much of their xPrism holdings have users committed to AMPs?""")
-with col1:
+with col2:
     st.text("")
     st.text("")
     st.altair_chart(perc_amps_chart.properties(height=350), use_container_width=True)
@@ -310,12 +344,12 @@ st.text("")
 
     
 
-col0, col1, col2 = st.columns([0.1,1,2])
-with col1:
+col1,col2, col0 = st.columns([2,1,0.1])
+with col2:
     st.subheader('Staking APR')
     st.markdown("""Prism allows to stake yLuna in normal staking, or Prism Farm. The two strategies yield different APRs and depend on the price of Luna, yLuna and the Prism token. Rewards from normal staking can be claimed in various tokens while the ones from Prism Farm are paid in PRISM tokens.""")
     st.markdown("""What do the APRs from the different strategies look like over time? What is the most profitable one?""")
-with col2:
+with col1:
     st.text("")
     st.altair_chart(aprs_chart.properties(height=350), use_container_width=True)
 
@@ -326,8 +360,8 @@ st.text("")
 st.text("")
 st.text("")
 
-col0, col1, col2 = st.columns([0.1,1,2])
-with col1:
+col1,col2, col0 = st.columns([2,1,0.1])
+with col2:
     st.subheader('Refraction')
     st.markdown("""In order to obtain yLuna and pLuna, users need to refract their Luna. 
     In practice, this means that the refracted Luna is staked with one of Prism associated validators and cLuna is generated. 
@@ -336,7 +370,7 @@ with col1:
     st.markdown("""How much Luna is refracted over time? 
     What where the days on which most Luna was refracted?
      And which ones saw a high number of Luna unrefracted?""")
-with col2:
+with col1:
     st.text("")
     st.text("")
     st.altair_chart(cp.refraction_asset_time(all_refracts).properties(height=350), use_container_width=True)
@@ -348,8 +382,8 @@ st.text("")
 st.text("")
 st.text("")
 
-col1, col2, col0 = st.columns([2,1,0.1])
-with col2:
+col0,col1, col2 = st.columns([0.1,1,2])
+with col1:
     st.subheader('yLUNA Usage')
     st.markdown("""yLuna entitles the owner to the staking rewards of the underlying Luna and the eventual airdrops.
 Prism Farm is also a valid way to employ yLuna.
@@ -357,7 +391,7 @@ yLuna can be also used to provide liquidity to the yLuna/PRISM pool. The rewards
     st.markdown("""Where has yLuna been employed? 
     How much yLuna is sitting idle? 
     Has Prism Farm gained the largest share?""")
-with col1:
+with col2:
     st.altair_chart(yluna_chart, use_container_width=True)
 
 st.text("")
@@ -367,8 +401,8 @@ st.text("")
 st.text("")
 st.text("")
 
-col1, col2, col0 = st.columns([2,1,0.1])
-with col2:
+col0,col1, col2 = st.columns([0.1,1,2])
+with col1:
     st.subheader('pLUNA Usage')
     st.markdown("""pLuna represents the principal component of the refracted Luna. 
     Currently, it can only be used as liquidity in the pLuna/PRISM pool, 
@@ -376,7 +410,7 @@ with col2:
     st.markdown("""Where is currently pLuna employed? 
     Is most of it sitting unsed in wallets? 
     How much is provided as liquidity in the pool?""")
-with col1:
+with col2:
     st.altair_chart(pluna_chart, use_container_width=True)
 
 st.text("")
@@ -397,6 +431,9 @@ st.markdown("""
 <style>
     label[data-testid="stMetricLabel"] {
         text-align:center
+    }
+    header[data-testid='stHeader']{
+        visibility: hidden
     }
     div[data-testid="stMetricValue"] {
         text-align:center

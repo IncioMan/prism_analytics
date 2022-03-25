@@ -61,7 +61,7 @@ def claim(claim_hash):
 class xPrismAmpsChart:
     
     def chart(perc_amps_n_user):
-        return alt.Chart(perc_amps_n_user).mark_bar(color='#ccf4ed').encode(
+        return alt.Chart(perc_amps_n_user).mark_bar(color='#DAFD91').encode(
             x = alt.X('Percentage of xPRISM in AMPs:N', axis=alt.Axis(tickCount=10, labelAngle=0, tickBand = 'center')),
             y='Number of users',
             tooltip= ['Percentage of xPRISM in AMPs', 'Number of users']

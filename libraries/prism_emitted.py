@@ -29,19 +29,19 @@ class PrismEmittedDataProvider():
         start_farm = datetime.date(2022, 3, 5)
         shift = 1
         #date_ = start_farm+datetime.timedelta(days=int(365/100*10))
-        #dates_to_mark.append((8000000,'10%',date_+datetime.timedelta(days=-shift),date_))
+        #dates_to_mark.append((12000000,'10%',date_+datetime.timedelta(days=-shift),date_))
         date_ = start_farm+datetime.timedelta(days=int(365/100*20))
-        dates_to_mark.append((8000000,'20%',date_+datetime.timedelta(days=-shift),date_))
+        dates_to_mark.append((12000000,'20%',date_+datetime.timedelta(days=-shift),date_))
         date_ = start_farm+datetime.timedelta(days=int(365/100*30))
-        dates_to_mark.append((8000000,'30%',date_+datetime.timedelta(days=-shift),date_))
+        dates_to_mark.append((12000000,'30%',date_+datetime.timedelta(days=-shift),date_))
         date_ = start_farm+datetime.timedelta(days=int(365/100*50))
-        dates_to_mark.append((8000000,'50%',date_+datetime.timedelta(days=-shift),date_))
+        dates_to_mark.append((12000000,'50%',date_+datetime.timedelta(days=-shift),date_))
         date_ = start_farm+datetime.timedelta(days=int(365))
-        dates_to_mark.append((8000000,'100%',date_+datetime.timedelta(days=-shift),date_))
+        dates_to_mark.append((12000000,'100%',date_+datetime.timedelta(days=-shift),date_))
         date_ = datetime.datetime.today().date()
         perc = round(self.prism_emitted[self.prism_emitted.Date==str(date_)]['Total Prism'].values[0]/1300000,2)
         self.up_to_today_emission = perc
-        dates_to_mark.append((8000000,f'{perc}%',date_+datetime.timedelta(days=-shift),date_))
+        dates_to_mark.append((12000000,f'{perc}%',date_+datetime.timedelta(days=-shift),date_))
         dates_to_mark = pd.DataFrame(dates_to_mark,columns=['height','text','text_date','Date'])
         dates_to_mark.Date = dates_to_mark.Date.apply(str)
         dates_to_mark.text_date = dates_to_mark.text_date.apply(str)
@@ -99,7 +99,7 @@ class PrismEmittedChartProvider:
         chart = alt.Chart(prism_emitted_so_far).mark_area().encode(
             x=alt.X('Date:T'),
             y=alt.Y('Amount:Q'),
-            color=alt.Color('Type:N',
+            color=alt.Color('Type:N', scale=alt.Scale(domain=['Boost','Normal'], range=['#c7208c','#fbb7bd']),
                         legend=alt.Legend(
                                     orient='none',
                                     padding=5,
@@ -112,12 +112,12 @@ class PrismEmittedChartProvider:
     def dates_to_mark(self, dates_to_mark, extra_dates_to_mark, final_date):
         if(final_date):
             dates_to_mark = dates_to_mark[dates_to_mark.Date <= final_date]
-        c2 = alt.Chart(dates_to_mark).mark_rule(color='#e45756').encode(
+        c2 = alt.Chart(dates_to_mark).mark_rule(color='#ffffff').encode(
             x='Date'+':T'
         )
 
         c3 = alt.Chart(dates_to_mark).mark_text(
-            color='#e45756',
+            color='#ffffff',
             angle=0
         ).encode(
             x=alt.X('text_date'+':T',axis=alt.Axis(title='')),
@@ -125,12 +125,12 @@ class PrismEmittedChartProvider:
             text='text'
         )
         
-        c4 = alt.Chart(extra_dates_to_mark).mark_rule(color='#a6cfe3').encode(
+        c4 = alt.Chart(extra_dates_to_mark).mark_rule(color='#ccf4ed').encode(
             x='Date'+':T'
         )
 
         c5 = alt.Chart(extra_dates_to_mark).mark_text(
-            color='#a6cfe3',
+            color='#ffffff',
             angle=270
         ).encode(
             x=alt.X('text_date'+':T',axis=alt.Axis(title='')),

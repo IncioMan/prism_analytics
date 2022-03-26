@@ -1,7 +1,7 @@
 name: GitHub Actions Demo
 on: [push]
 jobs:
-  Explore-GitHub-Actions:
+  fetch-amps-data:
     runs-on: ubuntu-latest
     steps:
       - name: code check out
@@ -12,12 +12,12 @@ jobs:
           pipenv install
       - name: data fetcher
         run: |
-          pipenv run python data_fetcher.py
+          pipenv run python ./scripts/amps.py
       - name: commit files
         run: |
           git config --global user.name 'IncioMan'
           git config --global user.email 'incio_man@live.com'
           git add .
-          git commit -am "Automated data fetching"
+          git commit -am "Automated amps data fetching"
           git push
       - run: echo "🍏 This job's status is ${{ job.status }}."

@@ -12,14 +12,13 @@ jobs:
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
       - run: touch ${{ github.workspace }}/test.txt
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
       - run: |
           git config --global user.name 'IncioMan'
           git config --global user.email 'incio_man@live.com'
           git add .
           git commit -am "Automated report"
           git push
-
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}."

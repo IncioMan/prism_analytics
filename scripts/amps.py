@@ -258,15 +258,15 @@ def write_amps_data(new_data, old_data, filename):
     if(old_data is None):
         old_data = df
     else:
-        amps_downloaded = old_data.append(df)
-    amps_downloaded.to_csv(filename)
-    return amps_downloaded
+        old_data = old_data.append(df)
+    old_data.to_csv(filename)
+    return old_data
 
 i = 1
 data = []
 pool = ThreadPool(4)  # Make the Pool of workers
 offset = 0
-max_lines = 10000
+max_lines = 1000
 addresses = []
 for user_address in addresses_to_process:
     if(i<=offset):

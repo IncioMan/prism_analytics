@@ -1,118 +1,118 @@
 ,Day,APR (%),Staking Strategy
-0,2022-03-16,9.48,yLUNA normal staking
-1,2022-03-14,9.11,yLUNA normal staking
-2,2022-03-20,8.47,yLUNA normal staking
-3,2022-03-01,9.24,yLUNA normal staking
-4,2022-03-15,9.25,yLUNA normal staking
-5,2022-03-10,8.29,yLUNA normal staking
-6,2022-02-14,20.02,yLUNA normal staking
-7,2022-02-22,12.03,yLUNA normal staking
-8,2022-03-23,8.51,yLUNA normal staking
+0,2022-02-20,12.57,yLUNA normal staking
+1,2022-02-19,12.61,yLUNA normal staking
+2,2022-03-05,8.38,yLUNA normal staking
+3,2022-02-16,13.53,yLUNA normal staking
+4,2022-03-10,8.29,yLUNA normal staking
+5,2022-02-28,9.35,yLUNA normal staking
+6,2022-03-04,8.91,yLUNA normal staking
+7,2022-02-25,10.61,yLUNA normal staking
+8,2022-02-22,12.03,yLUNA normal staking
 9,2022-03-18,9.49,yLUNA normal staking
-10,2022-02-15,14.38,yLUNA normal staking
-11,2022-02-24,10.87,yLUNA normal staking
+10,2022-03-23,8.51,yLUNA normal staking
+11,2022-02-15,14.38,yLUNA normal staking
 12,2022-03-02,9.67,yLUNA normal staking
-13,2022-02-20,12.57,yLUNA normal staking
-14,2022-03-05,8.38,yLUNA normal staking
-15,2022-02-16,13.53,yLUNA normal staking
-16,2022-02-23,11.11,yLUNA normal staking
-17,2022-02-27,10.06,yLUNA normal staking
-18,2022-02-19,12.61,yLUNA normal staking
-19,2022-03-08,7.86,yLUNA normal staking
-20,2022-03-11,9.16,yLUNA normal staking
-21,2022-03-12,9.13,yLUNA normal staking
-22,2022-03-24,8.54,yLUNA normal staking
-23,2022-03-19,8.72,yLUNA normal staking
-24,2022-02-18,12.74,yLUNA normal staking
-25,2022-03-22,8.46,yLUNA normal staking
-26,2022-03-17,9.36,yLUNA normal staking
-27,2022-03-06,8.39,yLUNA normal staking
-28,2022-03-09,8.39,yLUNA normal staking
-29,2022-02-26,10.29,yLUNA normal staking
-30,2022-03-03,9.03,yLUNA normal staking
-31,2022-03-07,8.2,yLUNA normal staking
-32,2022-02-17,13.77,yLUNA normal staking
-33,2022-03-04,8.91,yLUNA normal staking
-34,2022-02-25,10.61,yLUNA normal staking
-35,2022-02-28,9.35,yLUNA normal staking
-36,2022-02-21,12.2,yLUNA normal staking
-37,2022-03-21,8.53,yLUNA normal staking
-38,2022-03-13,9.15,yLUNA normal staking
-0,2022-03-16,7.13,LUNA native staking
-1,2022-03-14,7.16,LUNA native staking
-2,2022-03-20,6.76,LUNA native staking
-3,2022-03-01,7.55,LUNA native staking
-4,2022-03-15,7.15,LUNA native staking
-5,2022-03-10,7.09,LUNA native staking
-6,2022-02-14,9.57,LUNA native staking
-7,2022-02-22,8.93,LUNA native staking
-8,2022-03-23,6.67,LUNA native staking
+13,2022-02-24,10.87,yLUNA normal staking
+14,2022-02-14,20.02,yLUNA normal staking
+15,2022-02-23,11.11,yLUNA normal staking
+16,2022-02-27,10.06,yLUNA normal staking
+17,2022-03-15,9.25,yLUNA normal staking
+18,2022-03-07,8.2,yLUNA normal staking
+19,2022-03-03,9.03,yLUNA normal staking
+20,2022-02-26,10.29,yLUNA normal staking
+21,2022-02-17,13.77,yLUNA normal staking
+22,2022-03-19,8.72,yLUNA normal staking
+23,2022-02-18,12.74,yLUNA normal staking
+24,2022-03-22,8.46,yLUNA normal staking
+25,2022-03-20,8.47,yLUNA normal staking
+26,2022-03-14,9.11,yLUNA normal staking
+27,2022-03-16,9.48,yLUNA normal staking
+28,2022-03-06,8.39,yLUNA normal staking
+29,2022-03-09,8.39,yLUNA normal staking
+30,2022-03-01,9.24,yLUNA normal staking
+31,2022-03-17,9.36,yLUNA normal staking
+32,2022-03-13,9.15,yLUNA normal staking
+33,2022-02-21,12.2,yLUNA normal staking
+34,2022-03-21,8.53,yLUNA normal staking
+35,2022-03-12,9.13,yLUNA normal staking
+36,2022-03-11,9.16,yLUNA normal staking
+37,2022-03-08,7.86,yLUNA normal staking
+38,2022-03-24,8.54,yLUNA normal staking
+0,2022-02-20,9.07,LUNA native staking
+1,2022-02-19,9.11,LUNA native staking
+2,2022-03-05,6.93,LUNA native staking
+3,2022-02-16,9.27,LUNA native staking
+4,2022-03-10,7.09,LUNA native staking
+5,2022-02-28,7.75,LUNA native staking
+6,2022-03-04,7.05,LUNA native staking
+7,2022-02-25,8.21,LUNA native staking
+8,2022-02-22,8.93,LUNA native staking
 9,2022-03-18,7.16,LUNA native staking
-10,2022-02-15,9.54,LUNA native staking
-11,2022-02-24,8.32,LUNA native staking
+10,2022-03-23,6.67,LUNA native staking
+11,2022-02-15,9.54,LUNA native staking
 12,2022-03-02,7.36,LUNA native staking
-13,2022-02-20,9.07,LUNA native staking
-14,2022-03-05,6.93,LUNA native staking
-15,2022-02-16,9.27,LUNA native staking
-16,2022-02-23,8.42,LUNA native staking
-17,2022-02-27,7.93,LUNA native staking
-18,2022-02-19,9.11,LUNA native staking
-19,2022-03-08,6.74,LUNA native staking
-20,2022-03-11,7.17,LUNA native staking
-21,2022-03-12,7.19,LUNA native staking
-22,2022-03-24,6.68,LUNA native staking
-23,2022-03-19,6.75,LUNA native staking
-24,2022-02-18,9.13,LUNA native staking
-25,2022-03-22,6.67,LUNA native staking
-26,2022-03-17,7.13,LUNA native staking
-27,2022-03-06,6.86,LUNA native staking
-28,2022-03-09,7.11,LUNA native staking
-29,2022-02-26,8.04,LUNA native staking
-30,2022-03-03,7.19,LUNA native staking
-31,2022-03-07,6.81,LUNA native staking
-32,2022-02-17,9.25,LUNA native staking
-33,2022-03-04,7.05,LUNA native staking
-34,2022-02-25,8.21,LUNA native staking
-35,2022-02-28,7.75,LUNA native staking
-36,2022-02-21,9.01,LUNA native staking
-37,2022-03-21,6.69,LUNA native staking
-38,2022-03-13,7.18,LUNA native staking
-0,2022-03-16,39.32,yLUNA staking in Prism Farm
-1,2022-03-14,36.11,yLUNA staking in Prism Farm
-2,2022-03-20,37.65,yLUNA staking in Prism Farm
-3,2022-03-01,0.0,yLUNA staking in Prism Farm
-4,2022-03-15,37.58,yLUNA staking in Prism Farm
-5,2022-03-10,40.88,yLUNA staking in Prism Farm
-6,2022-02-14,0.0,yLUNA staking in Prism Farm
-7,2022-02-22,0.0,yLUNA staking in Prism Farm
-8,2022-03-23,41.34,yLUNA staking in Prism Farm
+13,2022-02-24,8.32,LUNA native staking
+14,2022-02-14,9.57,LUNA native staking
+15,2022-02-23,8.42,LUNA native staking
+16,2022-02-27,7.93,LUNA native staking
+17,2022-03-15,7.15,LUNA native staking
+18,2022-03-07,6.81,LUNA native staking
+19,2022-03-03,7.19,LUNA native staking
+20,2022-02-26,8.04,LUNA native staking
+21,2022-02-17,9.25,LUNA native staking
+22,2022-03-19,6.75,LUNA native staking
+23,2022-02-18,9.13,LUNA native staking
+24,2022-03-22,6.67,LUNA native staking
+25,2022-03-20,6.76,LUNA native staking
+26,2022-03-14,7.16,LUNA native staking
+27,2022-03-16,7.13,LUNA native staking
+28,2022-03-06,6.86,LUNA native staking
+29,2022-03-09,7.11,LUNA native staking
+30,2022-03-01,7.55,LUNA native staking
+31,2022-03-17,7.13,LUNA native staking
+32,2022-03-13,7.18,LUNA native staking
+33,2022-02-21,9.01,LUNA native staking
+34,2022-03-21,6.69,LUNA native staking
+35,2022-03-12,7.19,LUNA native staking
+36,2022-03-11,7.17,LUNA native staking
+37,2022-03-08,6.74,LUNA native staking
+38,2022-03-24,6.68,LUNA native staking
+0,2022-02-20,0.0,yLUNA staking in Prism Farm
+1,2022-02-19,0.0,yLUNA staking in Prism Farm
+2,2022-03-05,0.0,yLUNA staking in Prism Farm
+3,2022-02-16,0.0,yLUNA staking in Prism Farm
+4,2022-03-10,40.88,yLUNA staking in Prism Farm
+5,2022-02-28,0.0,yLUNA staking in Prism Farm
+6,2022-03-04,0.0,yLUNA staking in Prism Farm
+7,2022-02-25,0.0,yLUNA staking in Prism Farm
+8,2022-02-22,0.0,yLUNA staking in Prism Farm
 9,2022-03-18,40.76,yLUNA staking in Prism Farm
-10,2022-02-15,0.0,yLUNA staking in Prism Farm
-11,2022-02-24,0.0,yLUNA staking in Prism Farm
+10,2022-03-23,41.34,yLUNA staking in Prism Farm
+11,2022-02-15,0.0,yLUNA staking in Prism Farm
 12,2022-03-02,0.0,yLUNA staking in Prism Farm
-13,2022-02-20,0.0,yLUNA staking in Prism Farm
-14,2022-03-05,0.0,yLUNA staking in Prism Farm
-15,2022-02-16,0.0,yLUNA staking in Prism Farm
-16,2022-02-23,0.0,yLUNA staking in Prism Farm
-17,2022-02-27,0.0,yLUNA staking in Prism Farm
-18,2022-02-19,0.0,yLUNA staking in Prism Farm
-19,2022-03-08,51.81,yLUNA staking in Prism Farm
-20,2022-03-11,35.51,yLUNA staking in Prism Farm
-21,2022-03-12,43.74,yLUNA staking in Prism Farm
-22,2022-03-24,41.63,yLUNA staking in Prism Farm
-23,2022-03-19,38.78,yLUNA staking in Prism Farm
-24,2022-02-18,0.0,yLUNA staking in Prism Farm
-25,2022-03-22,40.93,yLUNA staking in Prism Farm
-26,2022-03-17,40.62,yLUNA staking in Prism Farm
-27,2022-03-06,0.0,yLUNA staking in Prism Farm
-28,2022-03-09,43.91,yLUNA staking in Prism Farm
-29,2022-02-26,0.0,yLUNA staking in Prism Farm
-30,2022-03-03,0.0,yLUNA staking in Prism Farm
-31,2022-03-07,64.15,yLUNA staking in Prism Farm
-32,2022-02-17,0.0,yLUNA staking in Prism Farm
-33,2022-03-04,0.0,yLUNA staking in Prism Farm
-34,2022-02-25,0.0,yLUNA staking in Prism Farm
-35,2022-02-28,0.0,yLUNA staking in Prism Farm
-36,2022-02-21,0.0,yLUNA staking in Prism Farm
-37,2022-03-21,39.43,yLUNA staking in Prism Farm
-38,2022-03-13,36.39,yLUNA staking in Prism Farm
+13,2022-02-24,0.0,yLUNA staking in Prism Farm
+14,2022-02-14,0.0,yLUNA staking in Prism Farm
+15,2022-02-23,0.0,yLUNA staking in Prism Farm
+16,2022-02-27,0.0,yLUNA staking in Prism Farm
+17,2022-03-15,37.58,yLUNA staking in Prism Farm
+18,2022-03-07,64.15,yLUNA staking in Prism Farm
+19,2022-03-03,0.0,yLUNA staking in Prism Farm
+20,2022-02-26,0.0,yLUNA staking in Prism Farm
+21,2022-02-17,0.0,yLUNA staking in Prism Farm
+22,2022-03-19,38.78,yLUNA staking in Prism Farm
+23,2022-02-18,0.0,yLUNA staking in Prism Farm
+24,2022-03-22,40.93,yLUNA staking in Prism Farm
+25,2022-03-20,37.65,yLUNA staking in Prism Farm
+26,2022-03-14,36.11,yLUNA staking in Prism Farm
+27,2022-03-16,39.32,yLUNA staking in Prism Farm
+28,2022-03-06,0.0,yLUNA staking in Prism Farm
+29,2022-03-09,43.91,yLUNA staking in Prism Farm
+30,2022-03-01,0.0,yLUNA staking in Prism Farm
+31,2022-03-17,40.62,yLUNA staking in Prism Farm
+32,2022-03-13,36.39,yLUNA staking in Prism Farm
+33,2022-02-21,0.0,yLUNA staking in Prism Farm
+34,2022-03-21,39.43,yLUNA staking in Prism Farm
+35,2022-03-12,43.74,yLUNA staking in Prism Farm
+36,2022-03-11,35.51,yLUNA staking in Prism Farm
+37,2022-03-08,51.81,yLUNA staking in Prism Farm
+38,2022-03-24,41.63,yLUNA staking in Prism Farm

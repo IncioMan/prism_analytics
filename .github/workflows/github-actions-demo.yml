@@ -9,7 +9,9 @@ jobs:
           pip install pipenv
           pipenv install
       - name: data fetcher
-        run: |
+        run:
+          ls ${{ github.workspace }}
+          cd ${{ github.workspace }}
           pipenv run python data_fetcher.py
       - name: commit files
         run: |

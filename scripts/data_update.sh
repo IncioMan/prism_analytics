@@ -1,6 +1,8 @@
 pipenv run python ./scripts/amps.py
-pipenv run python data_fetcher.py
-git add data/
-git commit -m 'new data'
+git add data/amps
+git commit -m 'daily amps'
 git push
-git push heroku main
+pipenv run python data_fetcher.py
+git add data/processed
+git commit -m 'daily processed data'
+git push

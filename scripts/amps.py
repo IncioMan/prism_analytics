@@ -234,15 +234,41 @@ cols = ['date', 'addr', 'user_xprism', 'user_amps', 'user_yluna', 'user_weight',
     'boost_apr', 'total_apr', 'current_daily_rewards', 'current_position_size', 'yluna_price', 'prism_price',
     'yluna_staked', 'total_boost_weight', 'boost_accrual_start_time', 'boost_accrual_last_updated',
     'active_boost', 'pending_reward']
-# sidebar assumptions
+
+amps_downloaded = None
+address_processed = {}
+filename = f'data/amps/amps_{today}.csv'
+try:
+    amps_downloaded = pd.read_csv(filename, index_col=0)
+    print(f'File {filename} found')
+    address_processed = set(amps_downloaded.addr.values)
+except Exception as e:
+    print(f'No file {filename} found')
+    print(e)
+addresses = df_claim['USER_ADDR'].values
+
+print(f'Total addresses to process: {len(addresses)}')
+addresses_to_process = set(addresses).difference(address_processed)
+print(f'Left addresses to process: {len(addresses_to_process)}')
+
+def write_amps_data(new_data, old_data, filename):
+    if(new_data is None or len(new_data)==0):
+        return old_data
+    df = pd.DataFrame(new_data, columns=cols)
+    if(old_data is None):
+        old_data = df
+    else:
+        amps_downloaded = old_data.append(df)
+    amps_downloaded.to_csv(filename)
+    return amps_downloaded
+
 i = 1
 data = []
-print(len(df_claim))
 pool = ThreadPool(4)  # Make the Pool of workers
-addresses = []
 offset = 0
 max_lines = 10000
-for _, user_address in df_claim['USER_ADDR'].iteritems():
+addresses = []
+for user_address in addresses_to_process:
     if(i<=offset):
         i+=1
         continue
@@ -259,12 +285,10 @@ for _, user_address in df_claim['USER_ADDR'].iteritems():
         addresses = []
     if(i%1000==0):
         print(f"{str(datetime.datetime.now()).split('.')[0]} - Processed {i} out of {len(df_claim)}", flush=True)
-        df = pd.DataFrame(data, columns=cols)
-        df.to_csv(f'data/amps/amps_{today}.csv')
+        amps_downloaded = write_amps_data(data, amps_downloaded, filename)    
     i+=1
 pool = ThreadPool(4)  # Make the Pool of workers
 print(f"{str(datetime.datetime.now()).split('.')[0]} - Processing {len(addresses)} addresses", flush=True)
 results = pool.map(get_amps_data, addresses) #Open the urls in their own threads
 data = [*data,*results]
-df = pd.DataFrame(data, columns=cols)
-df.to_csv(f'data/amps/amps_{today}.csv')
+amps_downloaded = write_amps_data(data, amps_downloaded, filename)    

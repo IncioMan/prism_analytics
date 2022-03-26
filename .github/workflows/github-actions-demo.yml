@@ -4,21 +4,17 @@ jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
-        uses: actions/checkout@v2
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - run: touch ${{ github.workspace }}/test.csv
-      - name: List files in the repository
+      - name: Setup
         run: |
-          ls ${{ github.workspace }}
-      - run: |
+          pip install pipenv
+      - name: data fetcher
+        run: |
+          pipenv run python data_fetcher.py
+      - name: Commit files
+        run: |
           git config --global user.name 'IncioMan'
           git config --global user.email 'incio_man@live.com'
           git add .
-          git commit -am "Automated report"
+          git commit -am "Automated data fetching"
           git push
       - run: echo "🍏 This job's status is ${{ job.status }}."

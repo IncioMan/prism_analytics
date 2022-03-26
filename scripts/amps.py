@@ -258,13 +258,13 @@ def write_amps_data(new_data, old_data, filename):
     if(old_data is None):
         old_data = df
     else:
-        amps_downloaded = old_data.append(df)
-    amps_downloaded.to_csv(filename)
-    return amps_downloaded
+        old_data = old_data.append(df)
+    old_data.to_csv(filename)
+    return old_data
 
 i = 1
 data = []
-pool = ThreadPool(4)  # Make the Pool of workers
+pool = ThreadPool(8)  # Make the Pool of workers
 offset = 0
 max_lines = 10000
 addresses = []
@@ -275,7 +275,7 @@ for user_address in addresses_to_process:
     if(i>max_lines):
         break
     addresses.append(user_address) 
-    if(i%100==0):
+    if(i%500==0):
         pool = ThreadPool(4)  # Make the Pool of workers
         print(f"{str(datetime.datetime.now()).split('.')[0]} - Processing {len(addresses)} addresses", flush=True)
         results = pool.map(get_amps_data, addresses) #Open the urls in their own threads

@@ -4,14 +4,14 @@ jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
     steps:
+      - name: code check out
+        uses: actions/checkout@v2
       - name: setup
         run: |
           pip install pipenv
           pipenv install
       - name: data fetcher
-        run:
-          ls ${{ github.workspace }}
-          cd ${{ github.workspace }}
+        run: |
           pipenv run python data_fetcher.py
       - name: commit files
         run: |

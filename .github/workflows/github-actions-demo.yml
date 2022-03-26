@@ -16,7 +16,6 @@ jobs:
         run: |
           ls ${{ github.workspace }}
       - run: |
-          cd ${{ github.workspace }}
           git config --global user.name 'IncioMan'
           git config --global user.email 'incio_man@live.com'
           git add .

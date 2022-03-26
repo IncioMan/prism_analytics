@@ -276,7 +276,7 @@ for user_address in addresses_to_process:
         break
     addresses.append(user_address) 
     if(i%500==0):
-        pool = ThreadPool(4)  # Make the Pool of workers
+        pool = ThreadPool(8)  # Make the Pool of workers
         print(f"{str(datetime.datetime.now()).split('.')[0]} - Processing {len(addresses)} addresses", flush=True)
         results = pool.map(get_amps_data, addresses) #Open the urls in their own threads
         data = [*data,*results]
@@ -288,7 +288,7 @@ for user_address in addresses_to_process:
         amps_downloaded = write_amps_data(data, amps_downloaded, filename)
         data = [] 
     i+=1
-pool = ThreadPool(4)  # Make the Pool of workers
+pool = ThreadPool(8)  # Make the Pool of workers
 print(f"{str(datetime.datetime.now()).split('.')[0]} - Processing {len(addresses)} addresses", flush=True)
 results = pool.map(get_amps_data, addresses) #Open the urls in their own threads
 data = [*data,*results]

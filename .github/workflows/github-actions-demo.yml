@@ -4,13 +4,14 @@ jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup
+      - name: setup
         run: |
           pip install pipenv
+          pipenv install
       - name: data fetcher
         run: |
           pipenv run python data_fetcher.py
-      - name: Commit files
+      - name: commit files
         run: |
           git config --global user.name 'IncioMan'
           git config --global user.email 'incio_man@live.com'

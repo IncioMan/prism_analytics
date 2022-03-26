@@ -285,7 +285,8 @@ for user_address in addresses_to_process:
         addresses = []
     if(i%1000==0):
         print(f"{str(datetime.datetime.now()).split('.')[0]} - Processed {i} out of {len(df_claim)}", flush=True)
-        amps_downloaded = write_amps_data(data, amps_downloaded, filename)    
+        amps_downloaded = write_amps_data(data, amps_downloaded, filename)
+        data = [] 
     i+=1
 pool = ThreadPool(4)  # Make the Pool of workers
 print(f"{str(datetime.datetime.now()).split('.')[0]} - Processing {len(addresses)} addresses", flush=True)

@@ -1,8 +1,4 @@
 name: GitHub Actions Demo
-on:
-  workflow_dispatch
-  schedule:
-    - cron:  '0 7 * * *'
 jobs:
   fetch-processed-data:
     runs-on: ubuntu-latest

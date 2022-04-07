@@ -19,6 +19,7 @@ pd.set_option("display.max_rows", 400)
 # In[227]:
 
 
+class PrismVestedDataProvider:
     def __init__(self, claim, path='../data'):
         self.path = path
         self.claim = claim
@@ -75,7 +76,7 @@ def claim(claim_hash):
     return df
 
 
-# In[307]:
+# In[336]:
 
 
 class ClaimPrismFarmChart:
@@ -94,15 +95,15 @@ class ClaimPrismFarmChart:
             'boost_apr': 'Boost APR (%)'
         }
         self.domain = ['Claim','Claim and Stake','Claim and Stake and Pledge']
-        self.range=['#ccf4ed','#dafd91','#fbb7bd']
+        self.range=['#7bb6d9','#ffffff','#408ec4']
         
     def amount_actions_total(self, prism_claim_df):
         df = prism_claim_df
         #df = ((dp.prism_claim_df.groupby('action').amount.sum()/dp.prism_claim_df.amount.sum()).apply(lambda x: round(x,2))*100).reset_index()
-        df = (dp.prism_claim_df.groupby('action').amount.sum().apply(lambda x: round(x,2))).reset_index()
+        df = (df.groupby('action').amount.sum().apply(lambda x: round(x,2))).reset_index()
         df.columns = ['Claim Action','Amount of PRISM']
         df['Amount of PRISM (k)'] = df['Amount of PRISM'].apply(lambda x: str(round(x/1000,2))+'k')
-        chart = alt.Chart(df).mark_arc(innerRadius=60).encode(
+        chart = alt.Chart(df, title='Amount of Prism').mark_arc(innerRadius=60).encode(
             theta=alt.Theta(field="Amount of PRISM", type="quantitative"),
             color=alt.Color(field="Claim Action", type="nominal",
                     #sort=['MARS & UST','MARS','UST'],
@@ -147,10 +148,10 @@ class ClaimPrismFarmChart:
     def n_users_actions_total(self, prism_claim_df):
         df = prism_claim_df
         #df = ((dp.prism_claim_df.groupby('action').user.nunique()/dp.prism_claim_df.user.nunique()).apply(lambda x: round(x,2))*100).reset_index()
-        df = (dp.prism_claim_df.groupby('action').user.nunique()).reset_index()
+        df = (df.groupby('action').user.nunique()).reset_index()
         df.columns = ['Claim Action','Number of users']
         df['Number of users'] = df['Number of users'].apply(lambda x: round(x,2))
-        chart = alt.Chart(df).mark_arc(innerRadius=60).encode(
+        chart = alt.Chart(df, title='Number of users').mark_arc(innerRadius=60).encode(
             theta=alt.Theta(field="Number of users", type="quantitative"),
             color=alt.Color(field="Claim Action", type="nominal",
                     #sort=['MARS & UST','MARS','UST'],
@@ -191,3 +192,4 @@ class ClaimPrismFarmChart:
             labelAngle=0
         ).configure_view(strokeOpacity=0)
         return chart
+

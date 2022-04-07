@@ -49,7 +49,7 @@ class PrismEmittedDataProvider():
         self.dates_to_mark = dates_to_mark
         extra_dates_to_mark = []
         date_ = start_farm+datetime.timedelta(days=33)
-        extra_dates_to_mark.append((17000000,'Unlock starts',date_+datetime.timedelta(days=-shift),date_))
+        extra_dates_to_mark.append((17000000,'Prism Rewards Become Claimable',date_+datetime.timedelta(days=-shift),date_))
         extra_dates_to_mark = pd.DataFrame(extra_dates_to_mark,columns=['height','text','text_date','Date'])
         extra_dates_to_mark.Date = extra_dates_to_mark.Date.apply(str)
         extra_dates_to_mark.text_date = extra_dates_to_mark.text_date.apply(str)
@@ -99,7 +99,7 @@ class PrismEmittedChartProvider:
         chart = alt.Chart(prism_emitted_so_far).mark_area().encode(
             x=alt.X('Date:T'),
             y=alt.Y('Amount:Q'),
-            color=alt.Color('Type:N', scale=alt.Scale(domain=['Boost','Normal'], range=['#c7208c','#fbb7bd']),
+            color=alt.Color('Type:N', scale=alt.Scale(domain=['Boost','Normal'], range=['#408ec4','#7bb6d9']),
                         legend=alt.Legend(
                                     orient='none',
                                     padding=5,

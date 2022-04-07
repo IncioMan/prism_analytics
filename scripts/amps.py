@@ -197,6 +197,8 @@ total_amps = total_boost_weight**2 / yluna_staked
 today = datetime.datetime.now().strftime("%Y%m%d")
 today_str = datetime.datetime.now().strftime("%Y-%m-%d")
 def get_amps_data(user_address):
+    if(user_address is None):
+        return None
     # user queries
     try:
         user_xprism, user_amps, \
@@ -266,7 +268,7 @@ i = 1
 data = []
 pool = ThreadPool(8)  # Make the Pool of workers
 offset = 0
-max_lines = 10000
+max_lines = 1000000
 addresses = []
 for user_address in addresses_to_process:
     if(i<=offset):

@@ -9,6 +9,7 @@ from libraries.prism_emitted import PrismEmittedChartProvider, PrismEmittedDataP
 from libraries.xPrismAmps_from_urls import xPrismAmpsChart, xPrismAMPsDP
 from libraries.aprs_over_time import APRSChart, APRDataProvider
 from libraries.amps_analytics import AMPSDataProvider
+from libraries.prism_vested_analytics import PrismVestedDataProvider
 
 def claim(claim_hash, cols_claim=[]):
     df_claim = pd.read_json(
@@ -29,12 +30,14 @@ lp_dp = LPDataProvider(claim,get_url,'./data')
 collector_dp = CollectorDataProvider(claim,get_url,'./data')
 xprism_amps_dp = xPrismAMPsDP(claim)
 aprs_dp = APRDataProvider(claim)
+prism_farm_claim_dp = PrismVestedDataProvider(claim)
 amps_dp = AMPSDataProvider(claim,'https://raw.githubusercontent.com/IncioMan/prism_analytics/main/data/amps/amps_{}.csv')
 ydp = DataProvider('yLuna')
 pdp = DataProvider('pLuna')
 pe_dp = PrismEmittedDataProvider()
 
-
+print("{} - Loading data: prism_farm_claim_dp...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
+prism_farm_claim_dp.load()
 print("{} - Loading data: ystake_dp...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
 ystake_dp.load()
 print("{} - Loading data: refract_dp...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
@@ -54,7 +57,8 @@ amps_dp.load()
 print("{} - Data Loaded...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
 
 
-print("{} - Parsing data...".format(str(datetime.datetime.now()).split('.')[0]), flush=True) 
+print("{} - Parsing data...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
+prism_farm_claim_dp.parse()
 ystake_dp.parse()
 refract_dp.parse()
 swaps_dp.parse()
@@ -89,6 +93,7 @@ last_yluna_farm= round(df[(df.Time==df.Time.max())\
         &(df['Type']=='yLuna Farm staked')]\
         ['Amount'].values[0]/1000000,2)
 
+prism_farm_claim_dp.prism_claim_df.to_csv('./data/processed/prism_vested_claim.csv')
 pe_dp.prism_emitted.to_csv('./data/processed/prism_emitted.csv')
 pe_dp.prism_emitted_so_far.to_csv('./data/processed/prism_emitted_so_far.csv')
 pe_dp.dates_to_mark.to_csv('./data/processed/pe_dp_dates_to_mark.csv')

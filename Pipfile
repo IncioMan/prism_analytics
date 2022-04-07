@@ -6,5 +6,6 @@ name = "pypi"
 [packages]
 streamlit = "*"
 matplotlib = "*"
+click = "7.1.2"
 
 [dev-packages]

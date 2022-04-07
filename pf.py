@@ -9,6 +9,7 @@ from libraries.prism_emitted import PrismEmittedChartProvider, PrismEmittedDataP
 from libraries.xPrismAmps_from_urls import xPrismAmpsChart, xPrismAMPsDP
 from libraries.aprs_over_time import APRSChart, APRDataProvider
 from libraries.amps_analytics import AMPSChart, AMPSDataProvider
+from libraries.prism_vested_analytics import ClaimPrismFarmChart
 
 ydp = DataProvider('yLuna')
 pdp = DataProvider('pLuna')
@@ -55,6 +56,7 @@ def get_data():
     amps_dp_amps = pd.read_csv(url.format('amps'), index_col=0)
     amps_activity = pd.read_csv(url.format('amps_activity'), index_col=0)
     single_metrics = pd.read_csv(url.format('single_metrics'), index_col=0)
+    prism_vested_claim = pd.read_csv(url.format('prism_vested_claim'), index_col=0)
     farm_users = single_metrics.loc['farm_participants'].values[0]
     last_yluna_farm = single_metrics.loc['last_yluna_farm'].values[0]
     last_farm_apr = single_metrics.loc['last_farm_apr'].values[0]
@@ -66,14 +68,14 @@ def get_data():
     pdp_dates_to_mark, pdp_asset_used, pdp_asset_unused, ydp_dates_to_mark,\
     ydp_asset_used, ydp_asset_unused, refract_dp_all_refreact, xprism_amps_dp_perc_amps_n_user,\
     aprs_dp_aprs, last_farm_apr, last_yluna_farm, up_to_today_emission, amps_dp_amps,\
-            boost_apr_median, farm_users, amps_activity
+            boost_apr_median, farm_users, amps_activity, prism_vested_claim
     
 
 pe_dp_prism_emitted, pe_dp_prism_emitted_so_far, pe_dp_dates_to_mark, pe_dp_extra_dates_to_mark,\
 pdp_dates_to_mark, pdp_asset_used, pdp_asset_unused, ydp_dates_to_mark,\
 ydp_asset_used, ydp_asset_unused, all_refracts, perc_amps_n_user, aprs,\
     last_farm_apr, last_yluna_farm, up_to_today_emission, amps,\
-        boost_apr_median, farm_users, amps_activity = get_data()
+        boost_apr_median, farm_users, amps_activity, prism_vested_claim = get_data()
 
 ###
 ###

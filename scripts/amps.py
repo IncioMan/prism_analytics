@@ -206,10 +206,10 @@ def get_amps_data(user_address):
         user_yluna, user_weight, active_boost, pending_reward = get_user_prism_farm(user_address)
     except Exception as e:
         print(e)
-        print(f'Error obtaining data for {user_address}')
+        print(f'Error obtaining data for {str(user_address)}')
         today = datetime.datetime.now().strftime("%Y%m%d")
         with open(f"data/amps/errors_{today}.txt", "a") as errorfile:
-            errorfile.write(user_address + "\n")
+            errorfile.write(str(user_address) + "\n")
         return None
     current_position_size = (user_yluna * yluna_price) + (user_xprism * xprism_price)
 

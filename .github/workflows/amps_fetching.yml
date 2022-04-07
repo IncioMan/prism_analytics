@@ -1,5 +1,6 @@
-name: GitHub Actions Demo
+name: AMPS Data Fetching
 on:
+  workflow_dispatch:
   schedule:
     - cron:  '0 6 * * *'
 jobs:

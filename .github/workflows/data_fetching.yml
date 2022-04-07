@@ -1,4 +1,5 @@
 name: GitHub Actions Demo
+on: [push]
 jobs:
   fetch-processed-data:
     runs-on: ubuntu-latest

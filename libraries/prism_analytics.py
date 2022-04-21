@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[333]:
+# In[1]:
 
 
 import pandas as pd
@@ -15,7 +15,7 @@ pd.set_option("display.max_rows", 400)
 
 # Trend line of what yLUNA is being used for?  PRISM Farm, yLUNA Staking, LPing, or Nothing.
 
-# In[334]:
+# In[2]:
 
 
 prism_addr = 'terra1dh9478k2qvqhqeajhn75a2a7dsnf74y5ukregw'
@@ -29,13 +29,13 @@ PRISM_xPRISM_Pair = 'terra1czynvm64nslq2xxavzyrrhau09smvana003nrf'
 PRISM_LUNA_Pair = 'terra1r38qlqt69lez4nja5h56qwf4drzjpnu8gz04jd'
 
 
-# In[335]:
+# In[3]:
 
 
 pool_pairs = [pLuna_PRISM_Pair,yLuna_PRISM_Pair,PRISM_cLUNA_Pair,PRISM_LUNA_Pair,PRISM_UST_Pair,PRISM_xPRISM_Pair]
 
 
-# In[336]:
+# In[4]:
 
 
 def claim(claim_hash):
@@ -46,14 +46,14 @@ def claim(claim_hash):
     return df
 
 
-# In[337]:
+# In[5]:
 
 
 def get_url(url):
     return pd.read_csv(url, index_col=0)
 
 
-# In[338]:
+# In[6]:
 
 
 class ChartProvider:
@@ -101,7 +101,7 @@ class ChartProvider:
         return chart
 
 
-# In[339]:
+# In[7]:
 
 
 class RefractDataProvider:
@@ -180,7 +180,7 @@ class RefractDataProvider:
         self.daily_delta_rf = daily_delta_rf
 
 
-# In[340]:
+# In[89]:
 
 
 class YLunaStakingDataProvider:
@@ -225,7 +225,8 @@ class YLunaStakingDataProvider:
         self.ystaking_df.block_timestamp=self.ystaking_df.block_timestamp.apply(str).apply(lambda x: x[:-7] if len(x) == 26 else x)
         self.ystaking_df['day'] = self.ystaking_df.hr.apply(str).str[:-13]
         self.ystaking_df = self.ystaking_df[['block_timestamp','tx_id','hr','day','action','amount','user','asset_given','asset_received']]
-        self.ystaking_df['amount_signed'] = self.ystaking_df.apply(lambda row: row.amount if row.action=='bond' else -row.amount,axis=1)
+        self.ystaking_df['amount_signed'] = self.ystaking_df.apply(lambda row: row.amount if row.action in ['bond','unbond'] else 0,axis=1)
+        self.ystaking_df['amount_signed'] = self.ystaking_df.apply(lambda row: row.amount_signed if row.action in ['bond'] else -row.amount_signed,axis=1)
         self.ystaking_df = self.ystaking_df.drop_duplicates(['tx_id','asset_given','asset_received'],ignore_index=True)
         
     def parse_ystaking_farm(self):
@@ -238,7 +239,8 @@ class YLunaStakingDataProvider:
         self.ystaking_farm_df.block_timestamp=self.ystaking_farm_df.block_timestamp.apply(str).apply(lambda x: x[:-7] if len(x) == 26 else x)
         self.ystaking_farm_df['hr'] = self.ystaking_farm_df.block_timestamp.str[:-5] + '00:00.000'
         self.ystaking_farm_df['day'] = self.ystaking_farm_df.block_timestamp.str[:-9]
-        self.ystaking_farm_df['amount_signed'] = self.ystaking_farm_df.apply(lambda row: row.amount if row.action=='bond' else -row.amount,axis=1)
+        self.ystaking_farm_df['amount_signed'] = self.ystaking_farm_df.apply(lambda row: row.amount if row.action in ['bond','unbond'] else 0,axis=1)
+        self.ystaking_farm_df['amount_signed'] = self.ystaking_farm_df.apply(lambda row: row.amount_signed if row.action in ['bond'] else -row.amount_signed,axis=1)
         self.ystaking_farm_df = self.ystaking_farm_df.drop_duplicates(['tx_id'],ignore_index=True)
     
     def parse(self):
@@ -246,7 +248,7 @@ class YLunaStakingDataProvider:
         self.parse_ystaking_farm()
 
 
-# In[341]:
+# In[68]:
 
 
 class SwapsDataProvider:
@@ -323,7 +325,7 @@ class SwapsDataProvider:
         
 
 
-# In[342]:
+# In[69]:
 
 
 class LPDataProvider:
@@ -404,7 +406,7 @@ class LPDataProvider:
         self.withdraw_ = withdraw_.drop_duplicates(ignore_index=True).drop_duplicates(['tx_id','asset'],ignore_index=True)
 
 
-# In[343]:
+# In[70]:
 
 
 class CollectorDataProvider:
@@ -522,7 +524,7 @@ class CollectorDataProvider:
         
 
 
-# In[344]:
+# In[71]:
 
 
 class DataProvider:
@@ -604,3 +606,383 @@ class DataProvider:
                 df['Amount'] = df.apply(lambda row: last_value if row.Time>last_date else 0,axis=1)
             dff = dff.append(df.fillna(0))
         return dff
+
+
+# In[90]:
+
+
+ystake_dp = YLunaStakingDataProvider(claim,get_url,'../data')
+#ystake_dp.load_from_url()
+ystake_dp.load()
+ystake_dp.write_to_csv()
+ystake_dp.parse()
+
+
+# In[48]:
+
+
+refract_dp = RefractDataProvider(claim,get_url,'../data')
+#refract_dp.load_from_url()
+refract_dp.load()
+#refract_dp.write_to_csv()
+refract_dp.parse()
+
+
+# In[49]:
+
+
+swaps_dp = SwapsDataProvider(claim,get_url,'../data')
+#swaps_dp.load_from_url()
+swaps_dp.load()
+#swaps_dp.write_to_csv()
+swaps_dp.parse()
+
+
+# In[50]:
+
+
+lp_dp = LPDataProvider(claim,get_url,'../data')
+#lp_dp.load_from_url()
+lp_dp.load()
+#lp_dp.write_to_csv()
+lp_dp.parse()
+
+
+# In[51]:
+
+
+collector_dp = CollectorDataProvider(claim,get_url,'../data')
+#collector_dp.load_from_url()
+collector_dp.load()
+#collector_dp.write_to_csv()
+collector_dp.parse(lp_dp.withdraw_, lp_dp.provide_, swaps_dp.swaps_df_all)
+
+
+# In[91]:
+
+
+ydp = DataProvider('yLuna')
+ydp.lp_delta(lp_dp.withdraw_[lp_dp.withdraw_.asset=='yLuna'],
+            lp_dp.provide_[lp_dp.provide_.asset=='yLuna'], 
+            swaps_dp.yluna_swaps.drop_duplicates(['tx_id','asset_given'],ignore_index=True), collector_dp.collector_pyluna[collector_dp.collector_pyluna.asset=='yLuna'])
+ydp.stk_delta(ystake_dp.ystaking_df)
+ydp.stk_farm_delta(ystake_dp.ystaking_farm_df)
+ydp.refact_delta(refract_dp.all_refreact)
+ydp.all_delta()
+ydp.all_deltas = ydp.fill_date_gaps(ydp.all_deltas)
+ydp.unused_asset(ydp.all_deltas)
+
+
+# In[96]:
+
+
+pdp = DataProvider('pLuna')
+pdp.lp_delta(lp_dp.withdraw_[lp_dp.withdraw_.asset=='pLuna'],
+            lp_dp.provide_[lp_dp.provide_.asset=='pLuna'], 
+            swaps_dp.yluna_swaps, collector_dp.collector_pyluna[collector_dp.collector_pyluna.asset=='pLuna'])
+pdp.refact_delta(refract_dp.all_refreact)
+pdp.all_delta()
+pdp.all_deltas = pdp.fill_date_gaps(pdp.all_deltas)
+pdp.unused_asset(pdp.all_deltas)
+
+
+# ### Check pLuna txs
+
+# In[97]:
+
+
+#Check the txs missing for the pool (get complete list from ET)
+contract = 'terra1persuahr6f8fm6nyup0xjc7aveaur89nwgs5vs'
+txs = pd.read_csv(f'../data/txs/{contract}.csv', index_col=0)
+txs.timestamp = pd.to_datetime(txs.timestamp)
+
+
+# In[98]:
+
+
+all_txs = lp_dp.lp_provide_withdraw_df[['tx_id','block_timestamp']]     .append(swaps_dp.swaps_df_all[['tx_id','block_timestamp']])     .append(refract_dp.all_refreact[['tx_id','block_timestamp']])     .append(collector_dp.collector_pyluna[['tx_id','block_timestamp']])
+
+
+# In[99]:
+
+
+max_date = min(all_txs.block_timestamp.max(), str(txs.timestamp.max()))
+
+
+# In[100]:
+
+
+txs = txs[txs.timestamp.apply(str) < max_date]
+txs.head()
+
+
+# In[101]:
+
+
+missing_txs = set(txs.hash.values).difference(set(all_txs.tx_id.values))
+#missing_txs
+len(missing_txs)
+
+
+# ### Check LP txs
+
+# In[102]:
+
+
+#Check the txs missing for the pool (get complete list from ET)
+contract = 'terra1kqc65n5060rtvcgcktsxycdt2a4r67q2zlvhce'
+txs = pd.read_csv(f'../data/txs/{contract}.csv', index_col=0)
+txs.timestamp = pd.to_datetime(txs.timestamp)
+
+
+# In[103]:
+
+
+max_date = min(ydp.all_lps.block_timestamp.max(), str(txs.timestamp.max()))
+
+
+# In[104]:
+
+
+txs = txs[txs.timestamp.apply(str) < max_date]
+txs.head()
+
+
+# In[105]:
+
+
+missing_txs = set(txs.hash.values).difference(set(ydp.all_lps.tx_id.values))
+#missing_txs
+len(missing_txs)
+
+
+# In[106]:
+
+
+ydp.all_lps[ydp.all_lps.amount_signed.isna()]
+
+
+# In[107]:
+
+
+extra_txs = set(ydp.all_lps.tx_id[(ydp.all_lps.block_timestamp<max_date)&(~ydp.all_lps.type.isin(['withdraw_lp','provide_lp']))].values)                .difference(set(txs.hash.values))
+
+
+# In[108]:
+
+
+len(extra_txs)
+
+
+# In[109]:
+
+
+ydp.all_lps[ydp.all_lps.tx_id.isin(extra_txs)].head()
+
+
+# In[110]:
+
+
+ydp.all_lps[ydp.all_lps.tx_id.isin(extra_txs)].groupby('type').amount_signed.sum()
+
+
+# ## Refract
+
+# In[111]:
+
+
+cp = ChartProvider()
+cp.refraction_asset_time(refract_dp.all_refreact)
+
+
+# In[112]:
+
+
+chart = alt.Chart(df).mark_bar().encode(
+    x=alt.X('Date:T', sort=alt.EncodingSortField(order='ascending')),
+    y="Amount:Q",
+    color=alt.Color('Asset refracted', 
+                    scale=alt.Scale(scheme='set2'),
+                    legend=alt.Legend(
+                                    orient='top-right',
+                                    padding=5,
+                                    legendY=0,
+                                    direction='vertical')),
+    tooltip=[alt.Tooltip('Date:T', format='%Y-%m-%d %H:%M'), 'Asset refracted', 'Amount']
+).properties(width=700).configure_axisX(
+    labelAngle=0
+).configure_view(strokeOpacity=0)
+chart
+
+
+# In[113]:
+
+
+daily_delta_rf = ydp.daily_delta_rf
+
+
+# In[114]:
+
+
+daily_delta_rf.head()
+
+
+# In[115]:
+
+
+cp = ChartProvider()
+domain = ['yLuna circulating']
+range_ = ['#f8936d']
+cp.get_yluna_time_area_chart(daily_delta_rf, 
+               alt.Scale(domain=domain, range=range_),
+               min_date = daily_delta_rf.Time.min(),
+               max_date = daily_delta_rf.Time.max(),
+               top_padding = 100000
+        ).properties(width=800).configure_view(strokeOpacity=0)
+
+
+# ## Swaps
+
+# ## yStaking
+
+# In[116]:
+
+
+def get_max_domain_date(df, time_field, n_hours):
+    if((pd.Timestamp(df[time_field].max()) - 
+                pd.Timestamp(df[time_field].min())).total_seconds()/3600 < n_hours):
+        max_date = (pd.Timestamp(df[time_field].min()) + pd.to_timedelta(n_hours, unit='h')).strftime("%Y-%m-%dT%H:%M:%SZ")
+    else:
+        max_date = df[time_field].max()
+    return max_date
+
+
+# In[117]:
+
+
+daily_delta_stk = ydp.daily_delta_stk
+
+
+# In[118]:
+
+
+domain = ['yLuna staked']
+range_ = ['#f8936d']
+cp.get_yluna_time_area_chart(daily_delta_stk, 
+               alt.Scale(domain=domain, range=range_),
+               min_date = daily_delta_stk.Time.min(),
+               max_date = daily_delta_stk.Time.max(),
+               top_padding = 10000
+        ).properties(width=800).configure_view(strokeOpacity=0)
+
+
+# ## yLuna LP
+
+# In[119]:
+
+
+daily_delta_lp = ydp.daily_delta_lp
+daily_delta_lp
+
+
+# In[120]:
+
+
+cp.get_yluna_time_area_chart(daily_delta_lp, 
+               alt.Scale(scheme='set2'),
+               min_date = daily_delta_stk.Time.min(),
+               max_date = daily_delta_stk.Time.max(),
+               top_padding = 10000
+        ).properties(width=800).configure_view(strokeOpacity=0)
+
+
+# In[121]:
+
+
+cp.get_yluna_time_area_chart(ydp.daily_delta_stk_farm, 
+               alt.Scale(scheme='set2'),
+               min_date = ydp.daily_delta_stk_farm.Time.min(),
+               max_date = ydp.daily_delta_stk_farm.Time.max(),
+               top_padding = 10000
+        ).properties(width=800).configure_view(strokeOpacity=0)
+
+
+# In[122]:
+
+
+cp.get_yluna_time_area_chart(ydp.asset_unused, 
+               alt.Scale(scheme='set2'),
+               min_date = ydp.asset_unused.Time.min(),
+               max_date = ydp.asset_unused.Time.max(),
+               top_padding = 10000
+        ).properties(width=800).configure_view(strokeOpacity=0)
+
+
+# ## All deltas
+
+# In[123]:
+
+
+all_deltas = ydp.asset_used.append(ydp.asset_unused)
+all_deltas = ydp.fill_date_gaps(all_deltas, ['2022-02-11','2022-02-12','2022-02-13'])
+c1 = cp.get_yluna_time_area_chart(all_deltas, 
+               alt.Scale(scheme='set2'),
+               min_date = all_deltas.Time.min(),
+               max_date = all_deltas.Time.max()
+        )
+
+c2 = alt.Chart(ydp.dates_to_mark).mark_rule(color='#e45756').encode(
+    x=alt.X('date'+':T')
+)
+
+c3 = alt.Chart(ydp.dates_to_mark).mark_text(
+    color='#e45756',
+    angle=0
+).encode( 
+    x=alt.X('text_date'+':T',axis=alt.Axis(labels=True,title='')),
+    y=alt.Y('height',axis=alt.Axis(labels=True,title='Amount')),
+    text='text'
+)
+
+(c1 + c2 + c3).properties(width=800).configure_view(strokeOpacity=0)
+
+
+# In[124]:
+
+
+all_deltas = pdp.asset_used.append(pdp.asset_unused)
+all_deltas = pdp.fill_date_gaps(all_deltas, ['2022-02-11','2022-02-12','2022-02-13'])
+c1 = cp.get_yluna_time_area_chart(all_deltas, 
+               alt.Scale(scheme='set2'),
+               min_date = all_deltas.Time.min(),
+               max_date = all_deltas.Time.max(),
+               top_padding = 1500000
+        )
+
+c2 = alt.Chart(pdp.dates_to_mark).mark_rule(color='#e45756').encode(
+    x=alt.X('date'+':T',axis=alt.Axis(labels=True,title=''))
+)
+
+c3 = alt.Chart(pdp.dates_to_mark).mark_text(
+    color='#e45756',
+    angle=0
+).encode(
+    x=alt.X('text_date'+':T',axis=alt.Axis(labels=True,title='')),
+    y=alt.Y('height',axis=alt.Axis(labels=True,title='Amount')),
+    text='text'
+)
+
+(c1 + c2 + c3).properties(width=800).configure_view(strokeOpacity=0)
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+

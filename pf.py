@@ -9,6 +9,7 @@ from libraries.prism_emitted import PrismEmittedChartProvider, PrismEmittedDataP
 from libraries.xPrismAmps_from_urls import xPrismAmpsChart, xPrismAMPsDP
 from libraries.aprs_over_time import APRSChart, APRDataProvider
 from libraries.amps_analytics import AMPSChart, AMPSDataProvider
+from libraries.prism_vested_analytics import ClaimPrismFarmChart
 
 ydp = DataProvider('yLuna')
 pdp = DataProvider('pLuna')
@@ -34,6 +35,7 @@ def get_url(url):
 cp = ChartProvider()
 pe_cp = PrismEmittedChartProvider()
 amps_cp = AMPSChart()
+prism_farm_claim_cp = ClaimPrismFarmChart()
 
 @st.cache(ttl=30000, show_spinner=False, allow_output_mutation=True)
 def get_data():
@@ -41,12 +43,16 @@ def get_data():
     print("{} - Loading data...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
     pe_dp_prism_emitted = pd.read_csv(url.format('prism_emitted'), index_col=0)
     pe_dp_prism_emitted_so_far = pd.read_csv(url.format('prism_emitted_so_far'), index_col=0)
+    print("{} - Loading data...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
     pe_dp_dates_to_mark = pd.read_csv(url.format('pe_dp_dates_to_mark'), index_col=0)
     pe_dp_extra_dates_to_mark = pd.read_csv(url.format('extra_dates_to_mark'), index_col=0)
+    print("{} - Loading data...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
     pdp_dates_to_mark = pd.read_csv(url.format('pdp_dates_to_mark'), index_col=0)
     pdp_asset_used = pd.read_csv(url.format('pdp_asset_used'), index_col=0)
+    print("{} - Loading data...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
     pdp_asset_unused = pd.read_csv(url.format('pdp_asset_unused'), index_col=0)
     ydp_dates_to_mark = pd.read_csv(url.format('ydp_dates_to_mark'), index_col=0)
+    print("{} - Loading data...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
     ydp_asset_used = pd.read_csv(url.format('ydp_asset_used'), index_col=0)
     ydp_asset_unused = pd.read_csv(url.format('ydp_asset_unused'), index_col=0)
     refract_dp_all_refreact = pd.read_csv(url.format('all_refreact'), index_col=0)
@@ -55,9 +61,12 @@ def get_data():
     amps_dp_amps = pd.read_csv(url.format('amps'), index_col=0)
     amps_activity = pd.read_csv(url.format('amps_activity'), index_col=0)
     single_metrics = pd.read_csv(url.format('single_metrics'), index_col=0)
+    prism_vested_claim = pd.read_csv(url.format('prism_vested_claim'), index_col=0)
+    print("{} - Loading data...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
     farm_users = single_metrics.loc['farm_participants'].values[0]
     last_yluna_farm = single_metrics.loc['last_yluna_farm'].values[0]
     last_farm_apr = single_metrics.loc['last_farm_apr'].values[0]
+    print("{} - Loading data...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
     boost_apr_median = single_metrics.loc['boost_apr_median'].values[0]
     up_to_today_emission = single_metrics.loc['up_to_today_emission'].values[0]
     print("{} - Data loaded".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
@@ -66,14 +75,14 @@ def get_data():
     pdp_dates_to_mark, pdp_asset_used, pdp_asset_unused, ydp_dates_to_mark,\
     ydp_asset_used, ydp_asset_unused, refract_dp_all_refreact, xprism_amps_dp_perc_amps_n_user,\
     aprs_dp_aprs, last_farm_apr, last_yluna_farm, up_to_today_emission, amps_dp_amps,\
-            boost_apr_median, farm_users, amps_activity
+            boost_apr_median, farm_users, amps_activity, prism_vested_claim
     
 
 pe_dp_prism_emitted, pe_dp_prism_emitted_so_far, pe_dp_dates_to_mark, pe_dp_extra_dates_to_mark,\
 pdp_dates_to_mark, pdp_asset_used, pdp_asset_unused, ydp_dates_to_mark,\
 ydp_asset_used, ydp_asset_unused, all_refracts, perc_amps_n_user, aprs,\
     last_farm_apr, last_yluna_farm, up_to_today_emission, amps,\
-        boost_apr_median, farm_users, amps_activity = get_data()
+        boost_apr_median, farm_users, amps_activity, prism_vested_claim = get_data()
 
 ###
 ###
@@ -128,6 +137,10 @@ perc_amps_chart = xPrismAmpsChart.chart(perc_amps_n_user)
 aprs_chart = APRSChart.chart(aprs)
 prism_emitted_chart = pe_cp.prism_emitted_chart(pe_dp_prism_emitted, pe_dp_prism_emitted_so_far, 
                        pe_dp_dates_to_mark, pe_dp_extra_dates_to_mark, '2022-05-25')
+pf_claim_n_users_actions_total_chart =  prism_farm_claim_cp.n_users_actions_total(prism_vested_claim)
+pf_claim_amount_actions_total_chart =  prism_farm_claim_cp.amount_actions_total(prism_vested_claim)
+pf_claim_amount_actions_chart =  prism_farm_claim_cp.amount_actions(prism_vested_claim)
+pf_claim_n_users_actions_chart =  prism_farm_claim_cp.n_users_actions(prism_vested_claim)
 
 st.markdown(f"""
 <div style=\"width: 100%; text-align: center\">
@@ -189,6 +202,97 @@ st.text("")
 st.text("")
 st.text("")
 
+col0,col1,col11,col2 = st.columns([0.1,1,1,1])
+with col1:
+    st.subheader('Prism Farm Claim Stats')
+    st.markdown("""
+    Prism tokens farmed in the Prism Farm event vest for 30 days before being claimable.
+    In these charts we look at the total amount of Prism tokens claimed and users who have claimed
+    and what actions they decided to perform. Prism can either be staked and/or pledged directly or simply
+    claimed and possibly dumped or used to arbitrage the xPrism/Prism pair.
+    """)
+    st.markdown("""Has most of the claimed Prism been staked/pledged or simply claimed?""")
+with col11:
+    st.altair_chart(pf_claim_n_users_actions_total_chart.properties(height=350), use_container_width=True)
+with col2:
+    st.altair_chart(pf_claim_amount_actions_total_chart.properties(height=350), use_container_width=True)
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
+#------------PRISM CLAIM FARM ----------------
+
+col0,col1,col2 = st.columns([2,1,0.1])
+with col1:
+    st.subheader('Users Claim Actions Over Time')
+    st.markdown("""The trend of what action users have performed on every single day can indicate
+    patterns relevant for the Prism tokenomics and users commitment to the project""")
+    st.markdown("""Has the trend of users who have pledged their rewards been constant?""")
+with col0:
+    st.altair_chart(pf_claim_n_users_actions_chart.properties(height=350), use_container_width=True)
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
+col0,col1, col2 = st.columns([2,1,0.1])
+with col1:
+    st.subheader('Amount of Prism Claimed Over Time')
+    st.markdown("""
+    The total amount of Prism for each claim action over time can also indicate patterns and can influence
+    the overall price action of the Prism token.""")
+    st.markdown("""What day has experienced the highest amount pledged? And only claimed? Does it coincide with 
+    days where xPrism/Prism presented arb opportunities or where Prism price action has been negative?""")
+with col0:
+    st.altair_chart(pf_claim_amount_actions_chart.properties(height=350), use_container_width=True)
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
+#------------PRISM PLEDGE DAILY ----------------
+
+col0,col1, col2 = st.columns([0.1,1,2])
+with col1:
+    st.subheader('xPRISM Pledged Daily')
+    st.markdown("""Every day users might pledge or unpledge their xPRISM. 
+    This affects the overall amount of AMPs in circulation, as each unpledging resests AMPs and 
+    new xPRISM pledge is more value committed into the protocol""")
+    st.markdown("""Have we experienced days of high unpledging activity? And what about pledging, is it constant over time?""")
+with col2:
+    st.altair_chart(amps_cp.pledge_unpledge_daily(amps_activity).properties(height=350), use_container_width=True)
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
+col0,col1, col2 = st.columns([0.1,1,2])
+with col1:
+    st.subheader('Users (un)pledging Daily')
+    st.markdown("""Looking at the number of users performing pledging/unpledging operations might show some market sentiment.
+    Indeed, some external events might lead many users to pledge/unpledge their xPRISM.""")
+    st.markdown("""What are the days with most activity? What could be the cause for that?""")
+with col2:
+    st.altair_chart(amps_cp.number_users_pledging(amps_activity).properties(height=350), use_container_width=True)
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
+
+#------------BOOST APR ----------------
+
 col1,col2, col0 = st.columns([2,1,0.1])
 with col2:
     st.subheader('Boost APR')
@@ -226,38 +330,6 @@ st.text("")
 st.text("")
 st.text("")
 
-col0,col1, col2 = st.columns([0.1,1,2])
-with col1:
-    st.subheader('xPRISM Pledged Daily')
-    st.markdown("""Every day users might pledge or unpledge their xPRISM. 
-    This affects the overall amount of AMPs in circulation, as each unpledging resests AMPs and 
-    new xPRISM pledge is more value committed into the protocol""")
-    st.markdown("""Have we experienced days of high unpledging activity? And what about pledging, is it constant over time?""")
-with col2:
-    st.altair_chart(amps_cp.pledge_unpledge_daily(amps_activity).properties(height=350), use_container_width=True)
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-
-col0,col1, col2 = st.columns([0.1,1,2])
-with col1:
-    st.subheader('Users (un)pledging Daily')
-    st.markdown("""Looking at the number of users performing pledging/unpledging operations might show some market sentiment.
-    Indeed, some external events might lead many users to pledge/unpledge their xPRISM.""")
-    st.markdown("""What are the days with most activity? What could be the cause for that?""")
-with col2:
-    st.altair_chart(amps_cp.number_users_pledging(amps_activity).properties(height=350), use_container_width=True)
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-
-
 
 col1,col2, col0 = st.columns([2,1,0.1])
 with col2:
@@ -293,6 +365,8 @@ st.text("")
 st.text("")
 st.text("")
 st.text("")
+
+#------------PRISM PLEDGE DAILY ----------------
 
 
 col0,col1, col2 = st.columns([0.1,1,2])

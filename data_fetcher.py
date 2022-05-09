@@ -117,6 +117,20 @@ pd.Series([ystake_dp.ystaking_farm_df.sender.nunique(),
         ],index=['farm_participants','last_yluna_farm',
         'last_farm_apr','boost_apr_median','up_to_today_emission']).to_csv('./data/processed/single_metrics.csv')
 
+#prism_claim_sell
+claim_df = prism_farm_claim_dp.prism_claim_df
+claim_df = claim_df[claim_df.action == 'Claim']
+prism_swap = swaps_dp.swaps_df_all
+prism_swap=prism_swap[prism_swap.asset_given=='PRISM']
+prism_swap_aggr = prism_swap.groupby(['day','user','asset_received']).offer_amount.sum().reset_index()
+gold = claim_df.merge(prism_swap_aggr, on=['user','day'])
+gold['Asset Received'] = gold.asset_received.apply(lambda x: x if x in ['UST','xPRISM'] else 'Other')
+gold['PRISM Swapped'] = gold.offer_amount
+df = gold.groupby(['day','Asset Received'])['PRISM Swapped'].sum().reset_index()
+df.to_csv('./data/processed/prism_claim_sell.csv')
+
+
+
 
 
 

@@ -69,21 +69,39 @@ def get_data():
     print("{} - Loading data...".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
     boost_apr_median = single_metrics.loc['boost_apr_median'].values[0]
     up_to_today_emission = single_metrics.loc['up_to_today_emission'].values[0]
+    prism_claim_sell = pd.read_csv(url.format('prism_claim_sell'), index_col=0)
     print("{} - Data loaded".format(str(datetime.datetime.now()).split('.')[0]), flush=True)
 
     return pe_dp_prism_emitted, pe_dp_prism_emitted_so_far, pe_dp_dates_to_mark, pe_dp_extra_dates_to_mark,\
     pdp_dates_to_mark, pdp_asset_used, pdp_asset_unused, ydp_dates_to_mark,\
     ydp_asset_used, ydp_asset_unused, refract_dp_all_refreact, xprism_amps_dp_perc_amps_n_user,\
     aprs_dp_aprs, last_farm_apr, last_yluna_farm, up_to_today_emission, amps_dp_amps,\
-            boost_apr_median, farm_users, amps_activity, prism_vested_claim
+            boost_apr_median, farm_users, amps_activity, prism_vested_claim, prism_claim_sell
     
 
 pe_dp_prism_emitted, pe_dp_prism_emitted_so_far, pe_dp_dates_to_mark, pe_dp_extra_dates_to_mark,\
 pdp_dates_to_mark, pdp_asset_used, pdp_asset_unused, ydp_dates_to_mark,\
 ydp_asset_used, ydp_asset_unused, all_refracts, perc_amps_n_user, aprs,\
     last_farm_apr, last_yluna_farm, up_to_today_emission, amps,\
-        boost_apr_median, farm_users, amps_activity, prism_vested_claim = get_data()
+        boost_apr_median, farm_users, amps_activity, prism_vested_claim, prism_claim_sell = get_data()
 
+def get_prism_claim_sell_chart(df):
+    print(df)
+    chart = alt.Chart(df).mark_line(point = True).encode(
+        x=alt.X('day:T'),
+        y=alt.X('PRISM Swapped:Q'),
+        color=alt.Color('Asset Received:N', 
+                    sort=['UST','Other'],
+                    legend=alt.Legend(
+                                orient='none',
+                                padding=5,
+                                legendY=0,
+                                direction='horizontal')),
+                    tooltip=[alt.Tooltip('day:T', format='%Y-%m-%d %H:%M'),'PRISM Swapped:Q','Asset Received:N']
+    ).properties(width=800).configure_view(strokeOpacity=0)
+    return chart
+
+prism_claim_sell_chart = get_prism_claim_sell_chart(prism_claim_sell)
 ###
 ###
 all_deltas = ydp_asset_used.append(ydp_asset_unused)
@@ -136,7 +154,7 @@ pluna_chart = (c1 + c2 + c3).properties(height=350).configure_view(strokeOpacity
 perc_amps_chart = xPrismAmpsChart.chart(perc_amps_n_user)
 aprs_chart = APRSChart.chart(aprs)
 prism_emitted_chart = pe_cp.prism_emitted_chart(pe_dp_prism_emitted, pe_dp_prism_emitted_so_far, 
-                       pe_dp_dates_to_mark, pe_dp_extra_dates_to_mark, '2022-05-25')
+                       pe_dp_dates_to_mark, pe_dp_extra_dates_to_mark, '2022-07-25')
 pf_claim_n_users_actions_total_chart =  prism_farm_claim_cp.n_users_actions_total(prism_vested_claim)
 pf_claim_amount_actions_total_chart =  prism_farm_claim_cp.amount_actions_total(prism_vested_claim)
 pf_claim_amount_actions_chart =  prism_farm_claim_cp.amount_actions(prism_vested_claim)
@@ -224,6 +242,19 @@ st.text("")
 st.text("")
 
 #------------PRISM CLAIM FARM ----------------
+col0,col1,col2 = st.columns([2,1,0.1])
+with col1:
+    st.subheader('Users Swap Prism Claimed')
+    st.markdown("""PRISM claimed from Prism Farm can be held, staked or sold.""")
+    st.markdown("""What have users done with the claimed PRISM? Have they been sold for UST or used to arb the PRISM/xPRISM pair?""")
+with col0:
+    st.altair_chart(prism_claim_sell_chart.properties(height=350), use_container_width=True)
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
 
 col0,col1,col2 = st.columns([2,1,0.1])
 with col1:
